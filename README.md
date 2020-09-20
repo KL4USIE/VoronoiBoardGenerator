@@ -1,8 +1,8 @@
 # Voronoi Map Generator
-This is a Unity implementation of a map generator using a similar process to the
-one outlined by [Amit Patel at Red Blob Games](http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/)
+This is a Unity implementation of a game board generator, inspired by strategy games like Civilization.
+Uses jceipek's Unity-delaunay project for Voronoi diagrams and SteveJohnstone's map generator for mapping them onto a mesh.
 
-It produces maps like this:
+It produces game boards like this:
 
 ![Image of Generated Map](https://raw.githubusercontent.com/SteveJohnstone/VoronoiMapGen/master/Readme/sample.gif)
 
@@ -10,6 +10,6 @@ It produces maps like this:
 - jceipek's Unity-delaunay project
   - https://github.com/jceipek/Unity-delaunay
   - Licence: MIT
-- Sebastian Lague's Terrain project
+- SteveJohnstone's map generator
   - https://github.com/SebLague/Procedural-Landmass-Generation
   - Licence: MIT
