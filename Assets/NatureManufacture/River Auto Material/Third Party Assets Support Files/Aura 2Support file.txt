@@ -1,0 +1,2 @@
+To support aura 2 system simply click right button on support file and click import.
+This will replace shaders so they will start to support volumetric render.

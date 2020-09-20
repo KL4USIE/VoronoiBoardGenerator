@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c062f1f622ac5144094df00784f8efb8, type: 3}
+  m_Name: R2_Lake_Reflective
+  m_EditorClassIdentifier: 
+  lakeMaterial: {fileID: 2100000, guid: 3153aa3e05668fc46b5bc334a5680907, type: 2}
+  distSmooth: 3
+  uvScale: 2
+  maximumTriangleSize: 20
+  traingleDensity: 0.25
+  receiveShadows: 0
+  shadowCastingMode: 0
+  automaticFlowMapScale: 0.2
+  noiseflowMap: 0
+  noiseMultiplierflowMap: 1
+  noiseSizeXflowMap: 0.2
+  noiseSizeZflowMap: 0.2
+  terrainCarve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.04559326
+      value: 0.026428223
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.3738097
+      value: -0.39921302
+      inSlope: -0.1847744
+      outSlope: -0.1847744
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 4.5076094
+      value: -0.9584842
+      inSlope: -0.24676323
+      outSlope: -0.24676323
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 10
+      value: -2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  terrainSmoothMultiplier: 1
+  terrainPaintCarve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  noiseCarve: 0
+  noiseMultiplierInside: 1
+  noiseMultiplierOutside: 0.25
+  noiseSizeX: 0.2
+  noiseSizeZ: 0.2
+  currentSplatMap: 1
+  noisePaint: 0
+  noiseMultiplierInsidePaint: 1
+  noiseMultiplierOutsidePaint: 0.5
+  noiseSizeXPaint: 0.2
+  noiseSizeZPaint: 0.2
+  mixTwoSplatMaps: 0
+  secondSplatMap: 1
+  addCliffSplatMap: 0
+  cliffSplatMap: 1
+  cliffAngle: 25
+  cliffBlend: 1
+  cliffSplatMapOutside: 1
+  cliffAngleOutside: 25
+  cliffBlendOutside: 1
+  distanceClearFoliage: 1
+  distanceClearFoliageTrees: 1
+  biomeType: 20

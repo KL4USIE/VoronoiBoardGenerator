@@ -1,10 +1,10 @@
 # Voronoi Map Generator
 This is a Unity implementation of a game board generator, inspired by strategy games like Civilization.
+
 Uses jceipek's Unity-delaunay project for Voronoi diagrams and SteveJohnstone's map generator for mapping them onto a mesh.
 
 It produces game boards like this:
 
-![Image of Generated Map](https://raw.githubusercontent.com/SteveJohnstone/VoronoiMapGen/master/Readme/sample.gif)
 
 ## References
 - jceipek's Unity-delaunay project

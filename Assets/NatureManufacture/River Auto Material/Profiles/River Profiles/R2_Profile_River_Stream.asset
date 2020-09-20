@@ -1,0 +1,218 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d559ec07676f794ea460d4324322121, type: 3}
+  m_Name: R2_Profile_River_Stream
+  m_EditorClassIdentifier: 
+  splineMaterial: {fileID: 2100000, guid: 64838725b4f346c4d80113e35b52bab9, type: 2}
+  meshCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minVal: 0.5
+  maxVal: 0.5
+  vertsInShape: 9
+  traingleDensity: 0.125
+  uvScale: 2
+  uvRotation: 0
+  receiveShadows: 0
+  shadowCastingMode: 0
+  flowFlat:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.054164886
+      value: 0.18250123
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.49583435
+      value: 0.2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0083313
+      value: 0.18750611
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  flowWaterfall:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.007969141
+      value: 0.45703125
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.50366247
+      value: 0.5137512
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0368422
+      value: 0.45143127
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  noiseflowMap: 1
+  noiseMultiplierflowMap: 0.1
+  noiseSizeXflowMap: 0.2
+  noiseSizeZflowMap: 0.2
+  floatSpeed: 10
+  terrainCarve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1.3649733
+      value: 0.2332784
+      inSlope: 0.013278776
+      outSlope: 0.013278776
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.26608765
+    - serializedVersion: 3
+      time: 0.7298825
+      value: 0.1429181
+      inSlope: -0.122262545
+      outSlope: -0.122262545
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.26463065
+      outWeight: 0.4931502
+    - serializedVersion: 3
+      time: 1.5065575
+      value: -0.15114385
+      inSlope: -0.15381376
+      outSlope: -0.15381376
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.16426834
+    - serializedVersion: 3
+      time: 9.823547
+      value: -0.55303955
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  distSmooth: 5
+  distSmoothStart: 1
+  terrainPaintCarve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.03345871
+      value: 0.0011138916
+      inSlope: 3.1375864
+      outSlope: 3.1375864
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0031128
+      value: 1.0095253
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  noiseCarve: 1
+  noiseMultiplierInside: 1
+  noiseMultiplierOutside: 0.25
+  noiseSizeX: 0.2
+  noiseSizeZ: 0.2
+  terrainSmoothMultiplier: 1
+  currentSplatMap: 0
+  mixTwoSplatMaps: 1
+  secondSplatMap: 1
+  addCliffSplatMap: 1
+  cliffSplatMap: 6
+  cliffAngle: 25
+  cliffBlend: 1
+  cliffSplatMapOutside: 7
+  cliffAngleOutside: 30
+  cliffBlendOutside: 1
+  distanceClearFoliage: 1
+  distanceClearFoliageTrees: 1
+  noisePaint: 1
+  noiseMultiplierInsidePaint: 8
+  noiseMultiplierOutsidePaint: 1
+  noiseSizeXPaint: 0.2
+  noiseSizeZPaint: 0.2
+  simulatedRiverLength: 120
+  simulatedRiverPoints: 10
+  simulatedMinStepSize: 1
+  simulatedNoUp: 0
+  simulatedBreakOnUp: 1
+  noiseWidth: 1
+  noiseMultiplierWidth: 4
+  noiseSizeWidth: 0.5
+  biomeType: 16

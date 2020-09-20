@@ -113,72 +113,55 @@ public static class MapGenerator
     }
 
 
-    private static void SetEdgesToWater(MapGraph graph)
-    {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
+    private static void SetEdgesToWater(MapGraph graph) {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
             if (node.IsEdge()) node.nodeType = MapGraph.MapNodeType.FreshWater;
         }
     }
 
-    private static void AverageCenterPoints(MapGraph graph)
-    {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
+    private static void AverageCenterPoints(MapGraph graph) {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
             node.centerPoint = new Vector3(node.centerPoint.x, node.GetCorners().Average(x => x.position.y), node.centerPoint.z);
         }
     }
 
-    private static void AddMountains(MapGraph graph)
-    {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
-            if (node.GetElevation() > 15f || node.GetHeightDifference() > 7f)
-            {
+    private static void AddMountains(MapGraph graph) {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
+            if (node.GetElevation() > 15f || node.GetHeightDifference() > 7f) {
                 node.nodeType = MapGraph.MapNodeType.Mountain;
             }
-            if (node.GetElevation() > 17f)
-            {
+            if (node.GetElevation() > 17f) {
                 node.nodeType = MapGraph.MapNodeType.Snow;
             }
         }
     }
 
-    private static void CreateLakes(MapGraph graph)
-    {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
+    private static void CreateLakes(MapGraph graph) {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
             var edges = node.GetEdges();
-            if (!edges.Any(x => x.water == 0))
-            {
+            if (!edges.Any(x => x.water == 0)) {
                 CreateLake(node);
             }
         }
     }
 
-    private static void FindRivers(MapGraph graph, float minElevation)
-    {
+    private static void FindRivers(MapGraph graph, float minElevation) {
         var riverCount = 0;
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
             var elevation = node.GetElevation();
-            if (elevation > minElevation)
-            {
+            if (elevation > minElevation) {
                 var waterSource = node.GetLowestCorner();
                 var lowestEdge = waterSource.GetDownSlopeEdge();
                 if (lowestEdge == null) continue;
                 CreateRiver(graph, lowestEdge);
-
                 riverCount++;
             }
         }
         //Debug.Log(string.Format("{0} rivers drawn", riverCount));
     }
 
-    private static void CreateRiver(MapGraph graph, MapGraph.MapNodeHalfEdge startEdge)
-    {
+    private static void CreateRiver(MapGraph graph, MapGraph.MapNodeHalfEdge startEdge) {
         bool heightUpdated = false;
-
         // Once a river has been generated, it tries again to see if a quicker route has been created.
         // This sets how many times we should go over the same river.
         var maxIterations = 1;
@@ -189,18 +172,15 @@ public static class MapGenerator
         var checkCount = 0;
 
         var previousRiverEdges = new List<MapGraph.MapNodeHalfEdge>();
-        do
-        {
+        do {
             heightUpdated = false;
 
             var riverEdges = new List<MapGraph.MapNodeHalfEdge>();
             var previousEdge = startEdge;
             var nextEdge = startEdge;
 
-            while (nextEdge != null)
-            {
-                if (checkCount >= maxChecks)
-                {
+            while (nextEdge != null) {
+                if (checkCount >= maxChecks) {
                     Debug.LogError("Unable to find route for river. Maximum number of checks reached");
                     return;
                 }
@@ -218,31 +198,26 @@ public static class MapGenerator
 
                 nextEdge = GetDownSlopeEdge(currentEdge, riverEdges);
 
-                if (nextEdge == null && previousEdge != null)
-                {
+                if (nextEdge == null && previousEdge != null) {
                     // We need to start carving a path for the river.
                     nextEdge = GetNewCandidateEdge(graph.GetCenter(), currentEdge, riverEdges, previousRiverEdges);
 
                     // If we can't get a candidate edge, then backtrack and try again
                     var previousEdgeIndex = riverEdges.Count - 1;
-                    while (nextEdge == null || previousEdgeIndex == 0)
-                    {
+                    while (nextEdge == null || previousEdgeIndex == 0) {
                         previousEdge = riverEdges[previousEdgeIndex];
                         previousEdge.water--;
                         nextEdge = GetNewCandidateEdge(graph.GetCenter(), previousEdge, riverEdges, previousRiverEdges);
                         riverEdges.Remove(previousEdge);
                         previousEdgeIndex--;
                     }
-                    if (nextEdge != null)
-                    {
-                        if (nextEdge.previous.destination.position.y != nextEdge.destination.position.y)
-                        {
+                    if (nextEdge != null) {
+                        if (nextEdge.previous.destination.position.y != nextEdge.destination.position.y) {
                             LevelEdge(nextEdge);
                             heightUpdated = true;
                         }
                     }
-                    else
-                    {
+                    else {
                         // We've tried tunneling, backtracking, and we're still lost.
                         Debug.LogError("Unable to find route for river");
                     }
@@ -253,10 +228,8 @@ public static class MapGenerator
             iterationCount++;
 
             // If the height was updated, we need to recheck the river again.
-            if (heightUpdated)
-            {
-                foreach (var edge in riverEdges)
-                {
+            if (heightUpdated) {
+                foreach (var edge in riverEdges) {
                     if (edge.water > 0) edge.water--;
                 }
                 previousRiverEdges = riverEdges;
@@ -264,8 +237,7 @@ public static class MapGenerator
         } while (heightUpdated);
     }
 
-    private static void CreateLake(MapGraph.MapNode node)
-    {
+    private static void CreateLake(MapGraph.MapNode node) {
         var lowestCorner = node.GetLowestCorner();
         node.nodeType = MapGraph.MapNodeType.FreshWater;
 
@@ -273,13 +245,11 @@ public static class MapGenerator
         SetNodeHeightToCornerHeight(node, lowestCorner);
     }
 
-    private static void LevelEdge(MapGraph.MapNodeHalfEdge currentEdge)
-    {
+    private static void LevelEdge(MapGraph.MapNodeHalfEdge currentEdge) {
         currentEdge.destination.position = new Vector3(currentEdge.destination.position.x, currentEdge.previous.destination.position.y, currentEdge.destination.position.z);
     }
 
-    private static MapGraph.MapNodeHalfEdge GetDownSlopeEdge(MapGraph.MapNodeHalfEdge source, List<MapGraph.MapNodeHalfEdge> seenEdges)
-    {
+    private static MapGraph.MapNodeHalfEdge GetDownSlopeEdge(MapGraph.MapNodeHalfEdge source, List<MapGraph.MapNodeHalfEdge> seenEdges) {
         var corner = source.destination;
 
         var candidates = corner.GetEdges().Where(x =>
@@ -296,8 +266,7 @@ public static class MapGenerator
         return candidates.OrderByDescending(x => x.GetSlopeAngle()).FirstOrDefault();
     }
 
-    private static MapGraph.MapNodeHalfEdge GetNewCandidateEdge(Vector3 center, MapGraph.MapNodeHalfEdge source, List<MapGraph.MapNodeHalfEdge> seenEdges, List<MapGraph.MapNodeHalfEdge> previousEdges)
-    {
+    private static MapGraph.MapNodeHalfEdge GetNewCandidateEdge(Vector3 center, MapGraph.MapNodeHalfEdge source, List<MapGraph.MapNodeHalfEdge> seenEdges, List<MapGraph.MapNodeHalfEdge> previousEdges) {
         var corner = source.destination;
 
         var edges = corner.GetEdges().Where(x =>
@@ -319,44 +288,33 @@ public static class MapGenerator
     }
 
 
-    private static void SetNodeHeightToCornerHeight(MapGraph.MapNode node, MapGraph.MapPoint targetCorner)
-    {
-        foreach (var corner in node.GetCorners())
-        {
+    private static void SetNodeHeightToCornerHeight(MapGraph.MapNode node, MapGraph.MapPoint targetCorner) {
+        foreach (var corner in node.GetCorners()) {
             corner.position = new Vector3(corner.position.x, targetCorner.position.y, corner.position.z);
         }
         node.centerPoint = new Vector3(node.centerPoint.x, targetCorner.position.y, node.centerPoint.z);
     }
 
-    private static void FillOcean(MapGraph graph)
-    {
+    private static void FillOcean(MapGraph graph) {
         var startNode = graph.nodesByCenterPosition.FirstOrDefault(x => x.Value.IsEdge() && x.Value.nodeType == MapGraph.MapNodeType.FreshWater).Value;
         FloodFill(startNode, MapGraph.MapNodeType.FreshWater, MapGraph.MapNodeType.SaltWater);
     }
 
-    private static void FloodFill(MapGraph.MapNode node, MapGraph.MapNodeType targetType, MapGraph.MapNodeType replacementType)
-    {
+    private static void FloodFill(MapGraph.MapNode node, MapGraph.MapNodeType targetType, MapGraph.MapNodeType replacementType) {
         if (targetType == replacementType) return;
         if (node.nodeType != targetType) return;
         node.nodeType = replacementType;
-        foreach (var neighbor in node.GetNeighborNodes())
-        {
+        foreach (var neighbor in node.GetNeighborNodes()) {
             FloodFill(neighbor, targetType, replacementType);
         }
     }
 
-    private static void SetBeaches(MapGraph graph)
-    {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
-            if (node.nodeType == MapGraph.MapNodeType.Grass)
-            {
-                foreach (var neighbor in node.GetNeighborNodes())
-                {
-                    if (neighbor.nodeType == MapGraph.MapNodeType.SaltWater)
-                    {
-                        if (node.GetHeightDifference() < 0.8f)
-                        {
+    private static void SetBeaches(MapGraph graph) {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
+            if (node.nodeType == MapGraph.MapNodeType.Grass) {
+                foreach (var neighbor in node.GetNeighborNodes()) {
+                    if (neighbor.nodeType == MapGraph.MapNodeType.SaltWater) {
+                        if (node.GetHeightDifference() < 0.8f) {
                             node.nodeType = MapGraph.MapNodeType.Beach;
                         }
                         break;
@@ -366,14 +324,12 @@ public static class MapGenerator
         }
     }
 
-    private static void FindCities(MapGraph graph, float minElevation, float maxElevation, int maxCities)
-    {
+    private static void FindCities(MapGraph graph, float minElevation, float maxElevation, int maxCities) {
         var preferredElevation = 6f;
         var heightDifferenceWeighting = 4f;
 
         int cityCount = 0;
-        while (cityCount < maxCities)
-        {
+        while (cityCount < maxCities) {
             var candidate = GetCityCandidate(graph, preferredElevation, heightDifferenceWeighting).FirstOrDefault();
             if (candidate == null) break;
             candidate.nodeType = MapGraph.MapNodeType.City;
@@ -381,15 +337,12 @@ public static class MapGenerator
         }
     }
 
-    private static IOrderedEnumerable<MapGraph.MapNode> GetCityCandidate(MapGraph graph, float preferredElevation, float heightDifferenceWeighting)
-    {
-        var candidates = graph.nodesByCenterPosition.Values.Where((node) =>
-        {
+    private static IOrderedEnumerable<MapGraph.MapNode> GetCityCandidate(MapGraph graph, float preferredElevation, float heightDifferenceWeighting) {
+        var candidates = graph.nodesByCenterPosition.Values.Where((node) => {
             return node.nodeType == MapGraph.MapNodeType.Grass &&
             node.GetEdges().Any(x => x.water > 0) && // Has a river
             !node.GetNeighborNodes().Any(x => x.nodeType == MapGraph.MapNodeType.City); // Not next to another city
-        }).OrderBy((node) =>
-        {
+        }).OrderBy((node) => {
             var heightDifference = node.GetHeightDifference();
             var elevation = node.GetElevation();
             return Mathf.Abs(elevation - preferredElevation) + heightDifference * heightDifferenceWeighting;
@@ -397,25 +350,19 @@ public static class MapGenerator
         return candidates;
     }
 
-    private static void SetNodesToGrass(MapGraph graph)
-    {
+    private static void SetNodesToGrass(MapGraph graph) {
         foreach (var node in graph.nodesByCenterPosition.Values)
         {
             if (node.nodeType != MapGraph.MapNodeType.Error) node.nodeType = MapGraph.MapNodeType.Grass;
         }
     }
 
-    private static void SetLowNodesToWater(MapGraph graph, float cutoff)
-    {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
-            if (node.centerPoint.y <= cutoff)
-            {
+    private static void SetLowNodesToWater(MapGraph graph, float cutoff) {
+        foreach (var node in graph.nodesByCenterPosition.Values) {
+            if (node.centerPoint.y <= cutoff) {
                 var allZero = true;
-                foreach (var edge in node.GetEdges())
-                {
-                    if (edge.destination.position.y > cutoff)
-                    {
+                foreach (var edge in node.GetEdges()) {
+                    if (edge.destination.position.y > cutoff) {
                         allZero = false;
                         break;
                     }

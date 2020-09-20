@@ -45,13 +45,7 @@ public static class HeightMapGenerator {
     public static HeightMap GenerateHeightMapFlat(int width, int height, MapGraph graph) {
         
         float[,] values = new float[width, height];
-        Debug.Log("Heightmap resolution: "+width+" x "+height);/*
-            if (node.nodeType == MapGraph.MapNodeType.Mountain) { 
-                values = RaiseMountain(graph.mountainNodes, graph, values);//raise mountain nodes
-            }
-            if (node.nodeType == MapGraph.MapNodeType.Snow) { //raise Snow nodes 
-                values = RaiseSnow(node, graph, values);
-            }*/
+        //Debug.Log("Heightmap resolution: "+width+" x "+height);
         values = RaiseMountains(graph.mountainNodes, graph, values); //handing over graph.mountainNodes is redundant, leaving for WIP
         values = RaiseSnow(graph.snowNodes, graph, values);
         values = LowerWater(graph.waterNodes, graph, values);
@@ -79,7 +73,7 @@ public static class HeightMapGenerator {
     }
     public static float[,] RaiseSnow(List<MapGraph.MapNode> snowNodes, MapGraph graph, float[,] values) {
         foreach(MapGraph.MapNode node in snowNodes) {
-            Debug.Log("Snow Node coordinates: " + node.centerPoint.x + " x " + node.centerPoint.z);
+            //Debug.Log("Snow Node coordinates: " + node.centerPoint.x + " x " + node.centerPoint.z);
             //iterate through all points in bounding rectangle, check if they are parallel to the inside of each edge, raise them
             /* //broken
             Rect rect = node.GetBoundingRectangle();

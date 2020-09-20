@@ -1,0 +1,10 @@
+Import 7.18 URP support pack for unity 2019.3 default URP 7.18 
+Import 7.20 URP support pack for all higher URP 7.2 and 7.3 + versions
+
+ !! To turn on distortion and proper render at water find please turn on "Opaque Texture" and "Depth Texture" setting in UniversalRP settings !!
+You can find it at:
+UniversalRP-HighQuality
+UniversalRP-LowQuality
+UniversalRP-MediumQuality
+
+At the top of the settings.

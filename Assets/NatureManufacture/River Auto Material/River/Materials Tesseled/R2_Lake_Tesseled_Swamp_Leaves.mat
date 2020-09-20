@@ -1,0 +1,351 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: R2_Lake_Tesseled_Swamp_Leaves
+  m_Shader: {fileID: 4800000, guid: 0b665bd11b91fd8468845f3aef057821, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2998
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BigCascade:
+        m_Texture: {fileID: 2800000, guid: 62eeec30a68f2d14996a082e3939b7c8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BigCascadeNormal:
+        m_Texture: {fileID: 2800000, guid: 323d1bf6999942d4785aaed026eb2f23, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BigCascadeWaterTess:
+        m_Texture: {fileID: 2800000, guid: 1ce13a71fe2afd746b7fe0fcfca08591, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cascade:
+        m_Texture: {fileID: 2800000, guid: c68566ea293cd18429979fc9e8eb51c3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 1, y: 0}
+    - _CascadeNormal:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail1GSmDetail2ASm:
+        m_Texture: {fileID: 2800000, guid: 73d97b0dd5e26d14097fab8a0537ac3a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail1G_Sm_Detail_2_A_Sm:
+        m_Texture: {fileID: 2800000, guid: c11838f0692dc4c4a8be386a74aa7f26, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail1MTRAO:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail1R_Sm_Detail_2_A_Sm:
+        m_Texture: {fileID: 2800000, guid: c11838f0692dc4c4a8be386a74aa7f26, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail2Albedo:
+        m_Texture: {fileID: 2800000, guid: b8eb42f226f3e07428d524eb7a73251b, type: 3}
+        m_Scale: {x: 15, y: 15}
+        m_Offset: {x: 1, y: 0}
+    - _Detail2MTRAO:
+        m_Texture: {fileID: 2800000, guid: 3124890a235e76d4799c6e79abe3367b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Detail2Normal:
+        m_Texture: {fileID: 2800000, guid: 7fc45e10f5b3c8543aad5d2fafb8430f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedo:
+        m_Texture: {fileID: 2800000, guid: effaaf53589f9924e88f49065e161210, type: 3}
+        m_Scale: {x: 4, y: 4}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormal:
+        m_Texture: {fileID: 2800000, guid: b13ea66b41ccfa34a82687c65f1ff948, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailSm:
+        m_Texture: {fileID: 2800000, guid: 3124890a235e76d4799c6e79abe3367b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DummyTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Foam:
+        m_Texture: {fileID: 2800000, guid: 5d15a98fc0e7b4b4cb50bf0fd6279ee3, type: 3}
+        m_Scale: {x: 3, y: 3}
+        m_Offset: {x: 0, y: 0}
+    - _MicroWaveNormal:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 2800000, guid: 7a09bc1758fc41d4f9f239e2554ed06f, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: fb6566c21f717904f83743a5a76dd0b0, type: 3}
+        m_Scale: {x: 20, y: 20}
+        m_Offset: {x: 0, y: 0}
+    - _Normal2:
+        m_Texture: {fileID: 2800000, guid: fd8b85b15dfe0ad4cbbc5613a12722c6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Skybox:
+        m_Texture: {fileID: 8900000, guid: 56a68e301a0ff55469ae441c0112d256, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SlowCascade:
+        m_Texture: {fileID: 2800000, guid: 2f347103d0fd8084f9e979cf611d6fa1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SmallCascade:
+        m_Texture: {fileID: 2800000, guid: 2f347103d0fd8084f9e979cf611d6fa1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SmallCascadeNormal:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 3, y: 3}
+        m_Offset: {x: 0, y: 0}
+    - _SmallCascadeWaterTess:
+        m_Texture: {fileID: 2800000, guid: 9f1d5e83b0b47104684e6a5b22948a21, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: fd8b85b15dfe0ad4cbbc5613a12722c6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: e28dc97a9541e3642a48c0e3886688c5, type: 3}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _WaterCascadeTesselation:
+        m_Texture: {fileID: 2800000, guid: 43cd82d77572cc74188065122245d3bd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormal:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 3, y: 3}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormal1:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormall:
+        m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTess:
+        m_Texture: {fileID: 2800000, guid: 43cd82d77572cc74188065122245d3bd, type: 3}
+        m_Scale: {x: 0.7, y: 0.7}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTessCascade:
+        m_Texture: {fileID: 2800000, guid: c68566ea293cd18429979fc9e8eb51c3, type: 3}
+        m_Scale: {x: 0.7, y: 0.7}
+        m_Offset: {x: 0, y: 0}
+    - _WaterTesselation:
+        m_Texture: {fileID: 2800000, guid: 9f1d5e83b0b47104684e6a5b22948a21, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord4:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AOPower: 0
+    - _BackfaceAlpha: 0.85
+    - _BigCascadeAngle: 7
+    - _BigCascadeAngleFalloff: 2.3
+    - _BigCascadeFalloff: 80
+    - _BigCascadeFoamFalloff: 1.88
+    - _BigCascadeNoisePower: 2.71
+    - _BigCascadeNormalInfluence: 0
+    - _BigCascadeNormalScale: 0.7
+    - _BigCascadeSmoothness: 0
+    - _BigCascadeSpecular: 0.84
+    - _BigCascadeSpeed: 4
+    - _BigCascadeTransparency: 0.002
+    - _BigCascadeWaterNormalScale: 0.9
+    - _BigCascadeWaterTessScale: 0.3
+    - _CascadeAngle: 3.4
+    - _CascadeAngleFalloff: 0.7
+    - _CascadeFalloff: 0.84
+    - _CascadeFalloffSlow: 5.86
+    - _CascadeMetalic: 0
+    - _CascadeNormalInfluence: 20
+    - _CascadeNormalScale: 0.7
+    - _CascadePower: 0.96
+    - _CascadeSharpness: 100
+    - _CascadeSmoothness: 0.1
+    - _CascadeSpecular: 0
+    - _CascadeSpeed: 0.6
+    - _CascadeTiling: 8
+    - _CascadeTransparency: 0
+    - _CascadeWaterNormalScale: 0.9
+    - _CascadeWaterTessScale: 0.06
+    - _CascadesNoisePower: 2.71
+    - _ChromaticAberration: 0.1
+    - _CleanFalloffMultiply: 4
+    - _CleanFalloffPower: 0.59
+    - _CleanWaterNoisePower: 10
+    - _Cutoff: 0.5
+    - _Depth: 0.98
+    - _DepthFalloff: -13
+    - _Detail1AOPower: 1
+    - _Detail1NoisePower: 3.99
+    - _Detail2AOPower: 1
+    - _Detail2NoisePower: 2.05
+    - _Detail2NormalScale: 1
+    - _Detail2Smoothness: 1
+    - _Detail2Specular: 0.04
+    - _DetailAOPower: 1
+    - _DetailNoisePower: 1.44
+    - _DetailNormalScale: 1
+    - _DetailSmoothness: 1
+    - _DetailSpecular: 0.04
+    - _Distortion: 0.01
+    - _EdgeLength: 25
+    - _FarNormalBlendStartDistance: 30
+    - _FarNormalBlendThreshold: 0.5
+    - _FarNormalPower: 0.5
+    - _FastCascadeAngle: 90
+    - _FastCascadeFalloff: 80
+    - _FastCascadeNormalInfluence: 0
+    - _Float0: 0.0192
+    - _Float1: 0
+    - _Float10: 33.1
+    - _Float2: 0
+    - _Float3: 0.9
+    - _Float7: -11.22
+    - _Foam: 1.79
+    - _FoamCascade: 15
+    - _FoamDepth: -0.8
+    - _FoamFalloff: -50.3
+    - _FoamMetalic: 0
+    - _FoamPower: 4
+    - _FoamSmoothness: 0
+    - _FoamSpecular: 0
+    - _FoamSpeed: 0.3
+    - _FoamTiling: 2
+    - _Foamfalloff: -4
+    - _GlobalTiling: 1
+    - _GlossyReflections: 1
+    - _MacroWaveNormalScale: 0.205
+    - _MaskClipValue: 0.5
+    - _MicroWaveNormalScale: 0.092
+    - _NormalScale: 0.49
+    - _Occlusion: 0.48
+    - _Reflection: 0.66
+    - _ReflectionPower: 0.083
+    - _ShalowDepth: 4.14
+    - _ShalowFalloff: -1.4
+    - _ShalowFalloffMultiply: 4
+    - _ShalowFalloffPower: 4.48
+    - _SlowCascadeAngle: 0.001
+    - _SlowCascadeFalloff: 80
+    - _SlowCascadeFoamFalloff: 5.86
+    - _SlowCascadeSpeed: 0.15
+    - _SlowWaterSpeed: 0.5
+    - _SmallCascadeAngle: 0.3
+    - _SmallCascadeAngleFalloff: 0.5
+    - _SmallCascadeFalloff: 80
+    - _SmallCascadeFoamFalloff: 1.95
+    - _SmallCascadeNoisePower: 3.08
+    - _SmallCascadeNormalInfluence: 20
+    - _SmallCascadeNormalScale: 0.7
+    - _SmallCascadeSmoothness: 0
+    - _SmallCascadeSpecular: 0.8
+    - _SmallCascadeSpeed: 4
+    - _SmallCascadeWaterNormalScale: 0.69
+    - _SmallCascadeWaterTessScale: 0.2
+    - _Smoothness: 0.9
+    - _Specular: 0.1
+    - _SpecularHighlights: 1
+    - _TessMax: 11
+    - _TessMaxDisp: 11
+    - _TessMin: 0
+    - _TessPhongStrength: 0.5
+    - _TessValue: 25
+    - _ToggleSwitch1: 0
+    - _UVDirectionV1U0: 1
+    - _UVVDirection1UDirection0: 1
+    - _Udirection: 0
+    - _Vdirection: 0
+    - _WaterAOPower: 1
+    - _WaterDeepTranslucencyPower: 0.1
+    - _WaterDepth: 0.031
+    - _WaterFallOfBorder: 9.32
+    - _WaterFalloff: 0.143
+    - _WaterFalloffBorder: 2.7
+    - _WaterMetalic: 0.081
+    - _WaterNormalScale: 0.1
+    - _WaterShalowDepth: 3.85
+    - _WaterShalowFalloff: -3.43
+    - _WaterShalowTranslucencyPower: 0
+    - _WaterSmoothness: 0.903
+    - _WaterSpecular: 0.076
+    - _WaterSpecularClose: 0
+    - _WaterSpecularFar: 0.037
+    - _WaterSpecularThreshold: 0.35
+    - _WaterSpeed: 0.5
+    - _WaterTessScale: 0.05
+    - _WaterTiling: 100
+    - _WaterTranslucencyPower: 0.55
+    - _WaveTranslucencyFallOffDistance: 30
+    - _WaveTranslucencyHardness: 2.5
+    - _WaveTranslucencyMultiply: 0.05
+    - _WaveTranslucencyPower: 0.97
+    - __dirty: 0
+    - _test: 0.35
+    m_Colors:
+    - _BigCascadeColor: {r: 20, g: 20, b: 20, a: 0}
+    - _BigCascadeMainSpeed: {r: 0.3, g: 1, b: 0, a: 0}
+    - _BigCascadeMixSpeed: {r: 0.02, g: 0.3, b: 0, a: 0}
+    - _CascadeColor: {r: 20, g: 20, b: 20, a: 0}
+    - _CascadeMainSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _CascadeTiling: {r: 2, g: 3, b: 0, a: 0}
+    - _Color0: {r: 0, g: 0.6749488, b: 0.8088235, a: 0}
+    - _Color1: {r: 0, g: 0.048731543, b: 0.22794023, a: 0}
+    - _DeepColor: {r: 0.1029411, g: 0.08306279, b: 0.018166086, a: 0}
+    - _Detail1MainSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _Detail1Tiling: {r: 32, g: 32, b: 0, a: 0}
+    - _Detail2AlbedoColor: {r: 0.8014706, g: 0.8014706, b: 0.8014706, a: 0}
+    - _Detail2MainSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _Detail2Tiling: {r: 40, g: 40, b: 0, a: 0}
+    - _DetailAlbedoColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FoamColor: {r: 20, g: 20, b: 20, a: 0}
+    - _FoamSpeed: {r: -0.001, g: 0.018, b: 0, a: 0}
+    - _MicroWaveTiling: {r: 20, g: 20, b: 0, a: 0}
+    - _NoiseSpeed: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseSpeed1: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseSpeed2: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseTiling: {r: 2, g: 2, b: 0, a: 0}
+    - _NoiseTiling1: {r: 8, g: 8, b: 0, a: 0}
+    - _NoiseTiling2: {r: 1, g: 1, b: 0, a: 0}
+    - _ShalowColor: {r: 0.13073725, g: 0.2573517, b: 0.070014216, a: 0}
+    - _SlowCascadeColor: {r: 20, g: 20, b: 20, a: 0}
+    - _SmallCascadeColor: {r: 20, g: 20, b: 20, a: 0}
+    - _SmallCascadeMainSpeed: {r: 2.5, g: 2.5, b: 0, a: 0}
+    - _SmallCascadeMixSpeed: {r: 0.02, g: 0.05, b: 0, a: 0}
+    - _SmallCascadeTiling: {r: 3, g: 2, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TilingNoise: {r: 0.6, g: 0.6, b: 0, a: 0}
+    - _WaterMainSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _WaterMixSpeed: {r: 0.002, g: 0.002, b: 0, a: 0}
+    - _WaterTiling: {r: 20, g: 20, b: 0, a: 0}

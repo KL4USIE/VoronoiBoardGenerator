@@ -1,0 +1,3 @@
+To support enviro weather system simply click right button on support file and click import.
+This will replace shaders so they will start to support volumetric enviro render.
+Make note also that without enviro shaders will throw errors.

@@ -1,0 +1,6 @@
+Import 7.18 HD RP support pack for unity 2019.3 default hd rp 7.18 
+Import 7.20 HD RP support pack for all higher HD RP 7.2 and 7.3 + versions
+
+Please add our SSS settings to your project. 
+Please find: "HDRenderPipelineAsset" 
+At the brottom please add our "NM_SSSSettings_Water_RAM" Profile into "Diffusion Profile List" It's because we use translucency on water.
