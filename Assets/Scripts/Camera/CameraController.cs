@@ -83,6 +83,12 @@ public class CameraController : MonoBehaviour
     public void Update()
     {
         GetPlayerInput();
+        float xValue = Input.GetAxis("Horizontal");
+        float zValue = Input.GetAxis("Vertical");
+        if (CameraTarget != null)
+        {
+            CameraTarget.transform.Translate(new Vector3(xValue, 0.0f, zValue));
+        }
 
         // Check if we still have a valid target
         if (CameraTarget != null)

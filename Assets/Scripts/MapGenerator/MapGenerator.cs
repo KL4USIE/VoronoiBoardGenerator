@@ -6,12 +6,21 @@ using Delaunay;
 
 public static class MapGenerator
 {
-    public static void GenerateMap(MapGraph graph, int landConnectionCycles)
+    public static void GenerateMap(MapGraph graph, int landConnectionCycles, int genVersion)
     {
-        SetAllUndetermined(graph);
-        FindWaterNodes(graph, landConnectionCycles);
-        FindMountainNodes(graph);
-        FindSnowNodes(graph);
+        switch (genVersion)
+        {
+            case 1:
+                GenerateV1(graph, landConnectionCycles);
+                break;
+            case 2:
+                GenerateV2(graph);
+                break;
+            default:
+                Console.WriteLine("Default case");
+                break;
+        }
+        
 
 /*
         SetNodesToGrass(graph);
@@ -28,12 +37,66 @@ public static class MapGenerator
        
     }
     //ADDED BY NOTH
+    private static void GenerateV1(MapGraph graph, int landConnectionCycles) {
+        SetAllUndetermined(graph);
+        FindWaterNodesV1(graph, landConnectionCycles);
+        FindMountainNodes(graph);
+        FindSnowNodes(graph);
+    }
+    private static void GenerateV2(MapGraph graph) {
+        SetAllUndetermined(graph);
+        FindWaterNodesV2(graph);
+        FindMountainNodes(graph);
+        FindSnowNodes(graph);
+    }
     private static void SetAllUndetermined(MapGraph graph) {
         foreach(var node in graph.nodesByCenterPosition.Values) {
             node.nodeType = MapGraph.MapNodeType.Undetermined;
         }
     }
-    private static void FindWaterNodes(MapGraph graph, int landConnectionCycles) {
+    private static void FindWaterNodesV2(MapGraph graph) { //Places Water by Setting very few "Mother"-nodes, who then convert sorrounding nodes, creating ocean-like watermasses
+        graph.waterNodes.Clear(); //Prepare for generation
+        List<MapGraph.MapNode> waterParents = new List<MapGraph.MapNode>();
+        foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Saltwater generation: Set random water node
+            if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //0.02 for land-dominated; 0.025 for water-dominated
+                waterParents.Add(node);                
+                node.nodeType = MapGraph.MapNodeType.SaltWater;
+                graph.waterNodes.Add(node);
+                WaterNodeRecursion(graph, node.GetNeighborNodes(), 1.0); //begin recursion                                  
+            }
+        }   
+        foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Freshwater generation
+            if(node.nodeType == MapGraph.MapNodeType.Undetermined) {
+                if (CheckLake(graph, node) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //Randomly place FreshWater origin
+                    node.nodeType = MapGraph.MapNodeType.FreshWater;
+                    graph.waterNodes.Add(node);
+                    foreach(MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) { //Expand freshwater
+                        if (CheckLake(graph, node) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //
+                            neighbourNode.nodeType = MapGraph.MapNodeType.FreshWater;
+                            graph.waterNodes.Add(neighbourNode);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private static void WaterNodeRecursion(MapGraph graph, List<MapGraph.MapNode> nodeList, double propability) {
+        List<MapGraph.MapNode> newNodes = new List<MapGraph.MapNode>();
+        if(propability > 0.0) {
+            foreach (MapGraph.MapNode node in nodeList) {
+                if(node.nodeType != MapGraph.MapNodeType.SaltWater) {
+                    if (UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
+                        node.nodeType = MapGraph.MapNodeType.SaltWater;
+                        graph.waterNodes.Add(node);
+                        newNodes.Add(node);
+                        WaterNodeRecursion(graph, node.GetNeighborNodes(), (propability - 0.3));
+                    }
+                }              
+            }
+        }       
+        return;
+    }
+    private static void FindWaterNodesV1(MapGraph graph, int landConnectionCycles) { //Places Water completely randomly, then optionally removes some thats sorrounded by land
         graph.waterNodes.Clear(); //Prepare for generation
         //List<MapGraph.MapNode> waterList = new List<MapGraph.MapNode>(); //moved to MapGraph
         foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Set random water nodes
@@ -43,8 +106,7 @@ public static class MapGenerator
             }
         }
         for(int i = 0; i < landConnectionCycles; i++) { //remove water sorrounded by land to make landmasses more coherent, impacted by Land Connection Cycles
-            List<MapGraph.MapNode> toBeRemoved = new List<MapGraph.MapNode>();
-            foreach (MapGraph.MapNode waterNode in graph.waterNodes) { 
+            foreach (MapGraph.MapNode waterNode in new List<MapGraph.MapNode>(graph.waterNodes)) { 
                 int undetNeighbourCount = 0;
                 foreach (MapGraph.MapNode neighbourNode in waterNode.GetNeighborNodes()) {
                     if (neighbourNode.nodeType == MapGraph.MapNodeType.Undetermined) {
@@ -53,25 +115,30 @@ public static class MapGenerator
                 }
                 if (undetNeighbourCount >= 5) {
                     waterNode.nodeType = MapGraph.MapNodeType.Undetermined;
-                    //waterList.Remove(waterNode); //cant remove while list is being looped 
-                    //Debug.Log("WATER REMOVED");
-                    toBeRemoved.Add(waterNode); //save removed nodes for a few lines down
+                    graph.waterNodes.Remove(waterNode); //cant remove while list is being looped, Update: Copyconstructor to the rescue!                   
                 }
-            }
-            foreach (MapGraph.MapNode node in toBeRemoved) { //remove nodes that were removed during land connection
-                graph.waterNodes.Remove(node);
+            }            
+        }
+        foreach(MapGraph.MapNode waterNode in graph.waterNodes) { //Find freshwater lakes
+            if (waterNode.nodeType != MapGraph.MapNodeType.SaltWater) break; //Important as to not revert land connections           
+            if(CheckLake(graph, waterNode)) waterNode.nodeType = MapGraph.MapNodeType.FreshWater;
+        }       
+    }
+    private static Boolean CheckLake(MapGraph graph, MapGraph.MapNode node) {
+        foreach (MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) {
+            if (neighbourNode.nodeType == MapGraph.MapNodeType.SaltWater) {
+                return false;
             }
         }
-        foreach(MapGraph.MapNode waterNode in graph.waterNodes) { //Find freshwater lakes, not working as intended
-            if (waterNode.nodeType != MapGraph.MapNodeType.SaltWater) break; //Important as to not reverse land connections
-            Boolean isLake = true;
-            foreach (MapGraph.MapNode neighbourNode in waterNode.GetNeighborNodes()) {
-                if (neighbourNode.nodeType == MapGraph.MapNodeType.SaltWater) {
-                    isLake = false;
-                }
+        return true;      
+    }
+    private static Boolean CheckSnow(MapGraph graph, MapGraph.MapNode node) {
+        foreach (MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) {
+            if (!(neighbourNode.nodeType == MapGraph.MapNodeType.Mountain || neighbourNode.nodeType == MapGraph.MapNodeType.Snow)) {
+                return false;
             }
-            if(isLake) waterNode.nodeType = MapGraph.MapNodeType.FreshWater;
-        }       
+        }
+        return true;
     }
     private static void FindMountainNodes(MapGraph graph) {
         graph.mountainNodes.Clear();
@@ -97,22 +164,27 @@ public static class MapGenerator
     private static void FindSnowNodes(MapGraph graph) {
         graph.snowNodes.Clear();
         foreach (var node in graph.nodesByCenterPosition.Values) {
-            if(node.nodeType != MapGraph.MapNodeType.FreshWater) {
-                int mountainNeighbourCount = 0;
-                foreach (MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) {
-                    if (neighbourNode.nodeType == MapGraph.MapNodeType.Mountain) {
-                        mountainNeighbourCount++;
-                    }                  
-                }
-                if (mountainNeighbourCount >= 5) {
+            if(node.nodeType != MapGraph.MapNodeType.FreshWater || node.nodeType != MapGraph.MapNodeType.SaltWater) {               
+                if (CheckSnow(graph, node)) {
                     node.nodeType = MapGraph.MapNodeType.Snow;
                     graph.snowNodes.Add(node);
+                }                 
+            }
+        }
+        foreach(var node in new List<MapGraph.MapNode>(graph.snowNodes)) { //Essentially another Iteration of the above, saving time by only going through neighbours of identified snow nodes. 
+            //Useful in case a newly created snow node created conditions for a node that has already been checked to also become a snow node. Same deal as V1 Water generation
+            foreach(var neighbourNode in node.GetNeighborNodes()) { 
+                if (node.nodeType != MapGraph.MapNodeType.FreshWater || node.nodeType != MapGraph.MapNodeType.SaltWater) {
+                    if (CheckSnow(graph, node)) {
+                        node.nodeType = MapGraph.MapNodeType.Snow;
+                        graph.snowNodes.Add(node);
+                    }
                 }
             }
         }
     }
 
-
+    //
     private static void SetEdgesToWater(MapGraph graph) {
         foreach (var node in graph.nodesByCenterPosition.Values) {
             if (node.IsEdge()) node.nodeType = MapGraph.MapNodeType.FreshWater;

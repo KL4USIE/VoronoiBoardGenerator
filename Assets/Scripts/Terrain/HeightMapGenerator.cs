@@ -42,8 +42,7 @@ public static class HeightMapGenerator {
 		return new HeightMap (values, minValue, maxValue);
 	}
     //ADDED BY NOTH
-    public static HeightMap GenerateHeightMapFlat(int width, int height, MapGraph graph) {
-        
+    public static HeightMap GenerateHeightMapFlat(int width, int height, MapGraph graph) {       
         float[,] values = new float[width, height];
         //Debug.Log("Heightmap resolution: "+width+" x "+height);
         values = RaiseMountains(graph.mountainNodes, graph, values); //handing over graph.mountainNodes is redundant, leaving for WIP
@@ -73,38 +72,9 @@ public static class HeightMapGenerator {
     }
     public static float[,] RaiseSnow(List<MapGraph.MapNode> snowNodes, MapGraph graph, float[,] values) {
         foreach(MapGraph.MapNode node in snowNodes) {
-            //Debug.Log("Snow Node coordinates: " + node.centerPoint.x + " x " + node.centerPoint.z);
-            //iterate through all points in bounding rectangle, check if they are parallel to the inside of each edge, raise them
-            /* //broken
-            Rect rect = node.GetBoundingRectangle();
-            List<MapGraph.MapPoint> cornerList = node.GetCorners().ToList<MapGraph.MapPoint>(); //corners of current node
-            for (float x=rect.xMin; x<rect.xMax; x++) {
-                for(float y=rect.yMin; y<rect.yMax; y++) {
-                    Vector2 check = new Vector2(x, y);   //Point being checked for raising                   
-                    List<Vector2> vecList = new List<Vector2>();
-                    foreach(MapGraph.MapPoint p in cornerList) {
-                        vecList.Add(new Vector2(p.position.x, p.position.y)); //conversion to Vector2
-                    }
-                    Vector2[] vecArray = vecList.ToArray(); //conversion to array
-                    Debug.Log("CHECKING RAISE");                      
-                    if (ContainsPoint(vecArray, check)) { //NEVER TRUE NEED TO INVESTIGATE
-                        values[(int)x-1, (int)y-1] = 10;
-                        Debug.Log("RAISED");
-                    } 
-                }
-            }*/
+            //Debug.Log("Snow Node coordinates: " + node.centerPoint.x + " x " + node.centerPoint.z);                   
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 8; //raise node center; works; USE Z
-            Debug.Log("RAISED");
-            /* //broken
-            List<MapGraph.MapPoint> corners = new List<MapGraph.MapPoint>(node.GetCorners());
-            for(int i = 0; i <= corners.Count; i+=2) {
-                Vector2 v = corners[i+1].position - corners[i].position;
-                values[(int)v.x, (int)v.y] = 10;
-            }
-            Vector2Int nodeCenter = new Vector2Int((int)node.centerPoint.x, (int)node.centerPoint.y);
-            values[nodeCenter.x, nodeCenter.y] = 10;
-            //Debug.Log("RAISED");
-            */
+            //Debug.Log("RAISED");        
             foreach (MapGraph.MapPoint corner in node.GetCorners()) { //raise corners
                 values[(int)corner.position.x, (int)corner.position.z] = 4;
             }

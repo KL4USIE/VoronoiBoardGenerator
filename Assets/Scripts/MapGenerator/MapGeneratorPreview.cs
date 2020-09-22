@@ -12,6 +12,10 @@ public partial class MapGeneratorPreview : MonoBehaviour
   //  public HeightMapSettings heightMapSettings;
     public int seed = 0;
     public bool autoUpdate;
+    [Range(0, 3)]
+    public int landConnectionCycles = 2;
+    [Range(1, 2)]
+    public int PropertyGenVersion = 1;
 
     [Header("Mesh Settings")]
     public int meshSize = 200;
@@ -21,8 +25,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public bool drawNodeBoundries;
     public bool drawDelauneyTriangles;
     public bool drawNodeCenters;
-    [Range(0, 3)]
-    public int landConnectionCycles = 2;
+    
     public List<MapNodeTypeColor> colours;
 
     [Header("Voronoi Generation")]
@@ -58,7 +61,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
         Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
 
         time = DateTime.Now;
-        MapGenerator.GenerateMap(mapGraph, landConnectionCycles);
+        MapGenerator.GenerateMap(mapGraph, landConnectionCycles, PropertyGenVersion);
         Debug.Log(string.Format("Map Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
         time = DateTime.Now;
