@@ -8,9 +8,11 @@ using Delaunay.Geo;
 
 public partial class MapGraph
 {
+    public List<MapGraph.MapNode> undetNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> waterNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> mountainNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> snowNodes = new List<MapGraph.MapNode>();
+    public List<MapGraph.MapNode> sandNodes = new List<MapGraph.MapNode>();
     public enum MapNodeType
     {
         FreshWater,
@@ -18,7 +20,7 @@ public partial class MapGraph
         Grass,
         Mountain,
         City,
-        Beach,
+        Sand,
         Error,
         Snow,
         Undetermined

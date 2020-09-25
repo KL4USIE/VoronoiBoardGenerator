@@ -13,7 +13,9 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public int seed = 0;
     public bool autoUpdate;
     [Range(0, 3)]
-    public int landConnectionCycles = 2;
+    public int V1_LandConnectionCycles = 2;
+    [Range(0, 3)]
+    public int V2_MountainReductionCycles = 2;
     [Range(1, 2)]
     public int PropertyGenVersion = 1;
 
@@ -61,7 +63,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
         Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
 
         time = DateTime.Now;
-        MapGenerator.GenerateMap(mapGraph, landConnectionCycles, PropertyGenVersion);
+        MapGenerator.GenerateMap(mapGraph, V1_LandConnectionCycles, PropertyGenVersion, V2_MountainReductionCycles);
         Debug.Log(string.Format("Map Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
         time = DateTime.Now;
