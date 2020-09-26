@@ -64,7 +64,8 @@ public static class MapGenerator
                 node.nodeType = MapGraph.MapNodeType.SaltWater;
                 graph.waterNodes.Add(node); //add water
                 graph.undetNodes.Remove(node); //remove undet
-                WaterNodeRecursion(graph, node.GetNeighborNodes(), 1.0); //begin recursion                                  
+                //WaterNodeRecursion(graph, node.GetNeighborNodes(), 1.0);
+                AnyNodeRecursion(graph, node.GetNeighborNodes(), 1.0, MapGraph.MapNodeType.SaltWater, graph.waterNodes, 0.3); //begin recursion                                  
             }
         }   
         foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Freshwater generation
@@ -151,6 +152,43 @@ public static class MapGenerator
         }
         return true;
     }
+    private static void FindMountainNodesV2(MapGraph graph) {
+        foreach (var node in new List<MapGraph.MapNode>(graph.undetNodes)) {
+            if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //0.02 for land-dominated; 0.025 for water-dominated              
+                node.nodeType = MapGraph.MapNodeType.Mountain;
+                graph.mountainNodes.Add(node); //add water
+                graph.undetNodes.Remove(node); //remove undet
+                MountainNodeRecursion(graph, node.GetNeighborNodes(), 1.0); //begin recursion                                  
+            }
+        }
+    }
+    private static void MountainNodeRecursion(MapGraph graph, List<MapGraph.MapNode> nodeList, double propability) {
+        if (propability > 0.0) { //just optimization
+            foreach (MapGraph.MapNode node in nodeList) {
+                if (node.nodeType != MapGraph.MapNodeType.Mountain && UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
+                    node.nodeType = MapGraph.MapNodeType.Mountain;
+                    graph.mountainNodes.Add(node); //add water
+                    graph.undetNodes.Remove(node); //remove undet
+                    MountainNodeRecursion(graph, node.GetNeighborNodes(), (propability - 0.4));
+                }
+            }
+        }
+        return;
+    }
+    private static void AnyNodeRecursion(MapGraph graph, List<MapGraph.MapNode> nodeList, double propability, MapGraph.MapNodeType recursionType, List<MapGraph.MapNode> typeList, double propabilityReduction) {
+        if (propability > 0.0) { //just optimization
+            foreach (MapGraph.MapNode node in nodeList) {
+                if (node.nodeType != recursionType && UnityEngine.Random.Range(0.0f, 1.0f) < propability)
+                {
+                    node.nodeType = recursionType;
+                    typeList.Add(node); //add water
+                    graph.undetNodes.Remove(node); //remove undet
+                    AnyNodeRecursion(graph, node.GetNeighborNodes(), (propability - propabilityReduction), recursionType, typeList, propabilityReduction);
+                }
+            }
+        }
+        return;
+    }
     private static void FindMountainNodes(MapGraph graph, int mountainReductionCycles) {
         graph.mountainNodes.Clear();
         foreach (var node in graph.nodesByCenterPosition.Values) {
@@ -173,7 +211,7 @@ public static class MapGenerator
             }
         }
         ReduceMountains(graph, mountainReductionCycles);
-    }
+    }   
     private static void ReduceMountains(MapGraph graph, int reductionCycles) {
         for (int i = 0; i < reductionCycles; i++) { //remove water sorrounded by land to make landmasses more coherent, impacted by Land Connection Cycles
             foreach (MapGraph.MapNode mountainNode in new List<MapGraph.MapNode>(graph.mountainNodes)) {
@@ -215,7 +253,7 @@ public static class MapGenerator
             }
         }
     }
-    private static void FindBeachNodes(MapGraph graph) { //Beaches scrapped, making deserts instead
+    private static void FindBeachNodes(MapGraph graph) { //Beaches scrapped, making deserts instead; this function is not being called
         foreach (var node in new List<MapGraph.MapNode>(graph.undetNodes)) {           
             int waterNeighbours = 0;
             foreach (var neighbourNode in node.GetNeighborNodes()) {
