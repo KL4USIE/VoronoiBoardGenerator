@@ -19,11 +19,14 @@ public partial class MapGraph
         SaltWater,
         Grass,
         Mountain,
-        City,
+        City, //old
         Sand,
-        Error,
+        Error, //old
         Snow,
-        Undetermined
+        Undetermined,
+        Forest,
+        PineForest,
+        Steppe
     }
 
     public Rect plotBounds;

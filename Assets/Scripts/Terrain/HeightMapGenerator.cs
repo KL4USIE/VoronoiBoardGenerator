@@ -76,7 +76,11 @@ public static class HeightMapGenerator {
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 8; //raise node center; works; USE Z
             //Debug.Log("RAISED");        
             foreach (MapGraph.MapPoint corner in node.GetCorners()) { //raise corners
-                values[(int)corner.position.x, (int)corner.position.z] = 4;
+                Vector2Int pos = new Vector2Int((int)corner.position.x, (int)corner.position.z);
+                if (pos.x < (graph.GetCenter().x * 2) && pos.x < (graph.GetCenter().z * 2)) {
+                    values[pos.x, pos.y] = 4;
+                }
+                //values[(int)corner.position.x, (int)corner.position.z] = 4;
             }
         }       
         return values;

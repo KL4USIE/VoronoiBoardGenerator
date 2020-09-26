@@ -16,7 +16,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public int V1_LandConnectionCycles = 2;
     [Range(0, 3)]
     public int V2_MountainReductionCycles = 2;
-    [Range(1, 2)]
+    [Range(1, 3)]
     public int PropertyGenVersion = 1;
 
     [Header("Mesh Settings")]
@@ -58,17 +58,17 @@ public partial class MapGeneratorPreview : MonoBehaviour
         var voronoi = new Delaunay.Voronoi(points, null, new Rect(0, 0, meshSize, meshSize), relaxationIterations);
         Debug.Log(string.Format("Voronoi Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
              
-        time = DateTime.Now;
+        //time = DateTime.Now;
         var mapGraph = new MapGraph(voronoi, snapDistance);
-        Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
+        //Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
 
         time = DateTime.Now;
         MapGenerator.GenerateMap(mapGraph, V1_LandConnectionCycles, PropertyGenVersion, V2_MountainReductionCycles);
         Debug.Log(string.Format("Map Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
-        time = DateTime.Now;
+        //time = DateTime.Now;
         var heightMap = HeightMapGenerator.GenerateHeightMapFlat(meshSize, meshSize, mapGraph);
-        Debug.Log(string.Format("Heightmap Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
+        //Debug.Log(string.Format("Heightmap Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
         
         if (previewType == PreviewType.HeightMap) {
             OnMeshDataReceived(MapMeshGenerator.GenerateMesh(mapGraph, heightMap, meshSize));
