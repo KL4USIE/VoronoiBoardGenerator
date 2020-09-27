@@ -127,7 +127,7 @@ public static class MapGenerator
         }
         foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Freshwater generation
             if (node.nodeType == MapGraph.MapNodeType.Undetermined) {
-                if (CheckLake(graph, node) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //Randomly place FreshWater origin
+                if (CheckLake(graph, node) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.03) { //Randomly place FreshWater origin
                     node.nodeType = MapGraph.MapNodeType.FreshWater;
                     graph.waterNodes.Add(node); //add water
                     graph.undetNodes.Remove(node); //remove undet

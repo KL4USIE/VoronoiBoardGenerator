@@ -89,11 +89,23 @@ public static class HeightMapGenerator {
         Dictionary<MapGraph.MapPoint, int> cornerDic = new Dictionary<MapGraph.MapPoint, int>();
         foreach (MapGraph.MapNode node in waterNodes) {
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = -6; //raise node center, works, USE Z           
-            foreach (MapGraph.MapPoint corner in node.GetCorners()) { //go through all corners of all mountain nodes, corners between mountains will appear multiple times.
-                if (cornerDic.ContainsKey(corner)) {                  //...if a corner appears three times, raise it
+            foreach (MapGraph.MapPoint corner in node.GetCorners()) { //go through all corners of all water nodes, corners between water will appear multiple times.
+                if (cornerDic.ContainsKey(corner)) {                  //...if a corner appears three times, lower it
                     cornerDic[corner]++;
                     if (cornerDic[corner] == 3) {
-                        values[(int)corner.position.x, (int)corner.position.z] = -6;
+                        List<MapGraph.MapNode> nodeList = new List<MapGraph.MapNode>(corner.GetNodes()); //fixed a bug where corners that...
+                        bool allowLowering = true; //also cornered on landnodes sometimes got lowered. Now checking all nodes adjacent to qualifying corners to confirm they are sorrounded by water
+                        //Debug.Log("CORNER: " + corner.position.x + " " + corner.position.z);
+                        foreach(var neighbourNode in nodeList) {
+                            //Debug.Log("NODE: " + neighbourNode.centerPoint.x + " " + neighbourNode.centerPoint.z);
+                            if (neighbourNode.nodeType != MapGraph.MapNodeType.SaltWater && neighbourNode.nodeType != MapGraph.MapNodeType.FreshWater) {
+                                allowLowering = false;                              
+                            }
+                        }
+                        if(allowLowering) {
+                            values[(int)corner.position.x, (int)corner.position.z] = -6;
+                        }
+                       
                     }
                 } else {
                     cornerDic.Add(corner, 1);
