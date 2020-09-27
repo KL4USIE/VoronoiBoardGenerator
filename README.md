@@ -10,5 +10,5 @@ Uses jceipek's Unity-delaunay project for Voronoi diagrams and SteveJohnstone's 
   - https://github.com/jceipek/Unity-delaunay
   - License: MIT
 - SteveJohnstone's map generator
-  - https://github.com/SebLague/Procedural-Landmass-Generation
+  - https://github.com/SteveJohnstone/VoronoiMapGen
   - License: MIT

@@ -15,18 +15,19 @@ public partial class MapGraph
     public List<MapGraph.MapNode> sandNodes = new List<MapGraph.MapNode>();
     public enum MapNodeType
     {
-        FreshWater,
-        SaltWater,
-        Grass,
-        Mountain,
+        FreshWater, //represents lakes
+        SaltWater, //represents ocean, very first generation
+        Grass, //randomly placed on remaining undetermined tiles
+        Mountain, //placed roughly central in landmasses, expands
         City, //old
-        Sand,
+        Sand, //used for southern deserts
         Error, //old
-        Snow,
-        Undetermined,
-        Forest,
-        PineForest,
-        Steppe
+        Snow, //the center of mountain regions
+        Undetermined, //the initial state of all tiles
+        Forest, //randomly placed on remaining undetermined tiles
+        PineForest, //nothern forest becomes PineForest instead
+        Steppe, //southern grass becomes steppe instead
+        Highland //southern Snow becomes highland instead
     }
 
     public Rect plotBounds;

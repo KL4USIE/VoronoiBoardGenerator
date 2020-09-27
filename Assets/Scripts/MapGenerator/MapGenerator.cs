@@ -317,12 +317,13 @@ public static class MapGenerator
                 }
             }
         }
+        foreach(var snowNode in graph.snowNodes) {
+            if (snowNode.centerPoint.z <= (graph.GetCenter().z * 0.6)) {
+                snowNode.nodeType = MapGraph.MapNodeType.Highland;
+            }
+        }
     }   
     private static Boolean CheckSnowV2(MapGraph graph, MapGraph.MapNode node) {
-        if(node.centerPoint.z <= (graph.GetCenter().z * 0.6)) { //dont gallow snow in the south
-            //Debug.Log("southfalse");
-            return false;
-        }
         foreach (MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) {
             if (!(neighbourNode.nodeType == MapGraph.MapNodeType.Mountain || neighbourNode.nodeType == MapGraph.MapNodeType.Snow)) { //if any neighbours are neither Mountain nor Snow, dont allow snow
                 return false;
