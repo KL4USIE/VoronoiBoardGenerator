@@ -13,6 +13,8 @@ public partial class MapGraph
     public List<MapGraph.MapNode> mountainNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> snowNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> sandNodes = new List<MapGraph.MapNode>();
+    public List<ColliderExtended> colliderList;
+
     public enum MapNodeType
     {
         FreshWater, //represents lakes
@@ -47,8 +49,7 @@ public partial class MapGraph
     /// </summary>
     public List<MapNodeHalfEdge> edges;
 
-    public MapGraph(Voronoi voronoi, float snapDistance)
-    {     
+    public MapGraph(Voronoi voronoi, float snapDistance) {     
         CreateFromVoronoi(voronoi);
 
         if (snapDistance > 0) SnapPoints(snapDistance);
@@ -218,31 +219,23 @@ public partial class MapGraph
                     var hasTopRight = site == topRightSite && !(startIsTop && startIsRight);
                     var hasBottomLeft = site == bottomLeftSite && !(startIsBottom && startIsLeft);
                     var hasBottomRight = site == bottomRightSite && !(startIsBottom && startIsRight);
-
-                    if (startIsTop)
-                    {
+                    //currentNode.collider = new EdgeCollider2D().points = ;
+                    if (startIsTop) {
                         if (hasTopRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, start, topRight, currentNode);
                         if (hasBottomRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, bottomRight, currentNode);
                         if (hasBottomLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, bottomLeft, currentNode);
                         if (hasTopLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, topLeft, currentNode);
-
-                    }
-                    else if (startIsRight)
-                    {
+                    } else if (startIsRight) {
                         if (hasBottomRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, start, bottomRight, currentNode);
                         if (hasBottomLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, bottomLeft, currentNode);
                         if (hasTopLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, topLeft, currentNode);
                         if (hasTopRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, topRight, currentNode);
-                    }
-                    else if (startIsBottom)
-                    {
+                    } else if (startIsBottom) {
                         if (hasBottomLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, start, bottomLeft, currentNode);
                         if (hasTopLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, topLeft, currentNode);
                         if (hasTopRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, topRight, currentNode);
                         if (hasBottomRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, bottomRight, currentNode);
-                    }
-                    else if (startIsLeft)
-                    {
+                    } else if (startIsLeft) {
                         if (hasTopLeft) previousEdge = AddEdge(edgesByStartPosition, previousEdge, start, topLeft, currentNode);
                         if (hasTopRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, topRight, currentNode);
                         if (hasBottomRight) previousEdge = AddEdge(edgesByStartPosition, previousEdge, previousEdge.destination.position, bottomRight, currentNode);

@@ -4,12 +4,9 @@ using System.Linq;
 using UnityEngine;
 using Delaunay;
 
-public static class MapGenerator
-{
-    public static void GenerateMap(MapGraph graph, int landConnectionCycles, int genVersion, int mountainReductionCycles)
-    {
-        switch (genVersion)
-        {
+public static class MapGenerator {
+    public static void GenerateMap(MapGraph graph, int landConnectionCycles, int genVersion, int mountainReductionCycles, ColliderManager cManager) {
+        switch (genVersion) {
             case 1:
                 GenerateV1(graph, landConnectionCycles);
                 break;
@@ -17,12 +14,13 @@ public static class MapGenerator
                 GenerateV2(graph, mountainReductionCycles);
                 break;
             case 3:
-                GenerateV3(graph, mountainReductionCycles);
+                GenerateV3(graph, mountainReductionCycles, cManager);
                 break;
             default:
                 Console.WriteLine("Default case");
                 break;
         }
+        
         
 
 /*
@@ -41,31 +39,46 @@ public static class MapGenerator
     }
     //ADDED BY NOTH
     private static void GenerateV1(MapGraph graph, int landConnectionCycles) {
-        SetAllUndetermined(graph);
+        SetAllUndetermined(graph, null);
         FindWaterNodesV1(graph, landConnectionCycles);
         FindMountainNodes(graph, 0);
         FindSnowNodesV1(graph);
         FindBeachNodes(graph);
     }
     private static void GenerateV2(MapGraph graph, int mountainReductionCycles) { //reworked Water generation
-        SetAllUndetermined(graph);
+        SetAllUndetermined(graph, null);
         FindWaterNodesV2(graph);
         FindMountainNodes(graph, mountainReductionCycles);
         FindSnowNodesV1(graph);
         FindDesertNodes(graph);
     }
-    private static void GenerateV3(MapGraph graph,int mountainReductionCycles) { //reworked Mountain generation
-        SetAllUndetermined(graph);
+    private static void GenerateV3(MapGraph graph,int mountainReductionCycles, ColliderManager cManager) { //reworked Mountain generation
+        SetAllUndetermined(graph, cManager);
         FindWaterNodesV2(graph);
         FindMountainNodesV3(graph, mountainReductionCycles);
         FindSnowNodesV2(graph);
         FindDesertNodes(graph);
         FindVegetationNodes(graph);
     }
-    private static void SetAllUndetermined(MapGraph graph) {
+    private static void SetAllUndetermined(MapGraph graph, ColliderManager cManager) {
+        cManager.ClearColliders();
         foreach(var node in graph.nodesByCenterPosition.Values) {
             node.nodeType = MapGraph.MapNodeType.Undetermined;
             graph.undetNodes.Add(node);
+            /*
+            PolygonCollider2D collider = new PolygonCollider2D();
+            List<Vector2> vecList = new List<Vector2>();
+            foreach(var point in node.GetCorners()) {
+                vecList.Add(new Vector2(point.position.x, point.position.z));
+            }
+            Vector2[] pointArray = vecList.ToArray();
+            collider.points = pointArray;
+            graph.colliderList.Add(new ColliderExtended(node, collider));
+            */
+            if(cManager != null) {
+                cManager.AddCollider(node);
+            }
+           
         }
     }   
     private static void FindWaterNodesV1(MapGraph graph, int landConnectionCycles) { //Places Water completely randomly, then optionally removes some thats sorrounded by land

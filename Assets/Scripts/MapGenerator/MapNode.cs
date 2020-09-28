@@ -11,8 +11,8 @@ public partial class MapGraph
     public class MapNode
     {
         //ADDED BY NOTH
-        public Delaunay.Site site { get; set; }
-
+        //public Delaunay.Site site { get; set; }
+        //public EdgeCollider2D collider;
 
         private float? _heightDifference;
         private Rect? _boundingRectangle;

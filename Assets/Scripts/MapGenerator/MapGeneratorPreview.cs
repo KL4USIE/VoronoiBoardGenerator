@@ -15,7 +15,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
     [Range(0, 3)]
     public int V1_LandConnectionCycles = 2;
     [Range(0, 3)]
-    public int V2_MountainReductionCycles = 2;
+    public int MountainReductionCycles = 2;
     [Range(1, 3)]
     public int PropertyGenVersion = 1;
 
@@ -40,6 +40,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
     public MeshCollider meshCollider;
+    public ColliderManager colliderManager;
 
     public void Start() {
         StartCoroutine(GenerateMapAsync());
@@ -63,7 +64,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
         //Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
 
         time = DateTime.Now;
-        MapGenerator.GenerateMap(mapGraph, V1_LandConnectionCycles, PropertyGenVersion, V2_MountainReductionCycles);
+        MapGenerator.GenerateMap(mapGraph, V1_LandConnectionCycles, PropertyGenVersion, MountainReductionCycles, colliderManager);
         Debug.Log(string.Format("Map Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
         //time = DateTime.Now;
