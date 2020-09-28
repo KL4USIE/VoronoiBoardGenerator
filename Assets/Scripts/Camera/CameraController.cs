@@ -82,12 +82,13 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+        //ADDED BY NOTH
         GetPlayerInput();
         float xValue = Input.GetAxis("Horizontal");
         float zValue = Input.GetAxis("Vertical");
-        if (CameraTarget != null)
-        {
-            CameraTarget.transform.Translate(new Vector3(xValue, 0.0f, zValue));
+        if (CameraTarget != null && (xValue != 0 || zValue != 0)) {
+            Vector3 adjustedDirection = Camera.main.transform.TransformDirection(new Vector3(xValue, 0.0f, zValue));//recalculate input to be based on camera direction
+            CameraTarget.transform.Translate(new Vector3(adjustedDirection.x, 0, adjustedDirection.z));//set y to zero because thats how i want it
         }
 
         // Check if we still have a valid target

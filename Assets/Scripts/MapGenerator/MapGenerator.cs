@@ -130,7 +130,7 @@ public static class MapGenerator {
     private static void FindWaterNodesV2(MapGraph graph) { //Places Water by Setting very few "Mother"-nodes, who then convert sorrounding nodes, creating ocean-like watermasses
         graph.waterNodes.Clear(); //Prepare for generation
         foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Saltwater generation: Set random water node
-            if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.022) { //0.02 for land-dominated; 0.025 for water-dominated              
+            if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.020) { //0.02 for land-dominated; 0.025 for water-dominated              
                 node.nodeType = MapGraph.MapNodeType.SaltWater;
                 graph.waterNodes.Add(node); //add water
                 graph.undetNodes.Remove(node); //remove undet

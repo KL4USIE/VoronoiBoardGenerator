@@ -74,6 +74,9 @@ public static class HeightMapGenerator {
         foreach(MapGraph.MapNode node in snowNodes) {
             //Debug.Log("Snow Node coordinates: " + node.centerPoint.x + " x " + node.centerPoint.z);                   
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 8; //raise node center; works; USE Z
+
+            //node.centerPoint = new Vector3(node.centerPoint.x, 8, node.centerPoint.z);
+
             //Debug.Log("RAISED");        
             foreach (MapGraph.MapPoint corner in node.GetCorners()) { //raise corners
                 Vector2Int pos = new Vector2Int((int)corner.position.x, (int)corner.position.z);

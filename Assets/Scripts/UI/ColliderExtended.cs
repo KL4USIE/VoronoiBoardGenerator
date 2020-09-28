@@ -4,49 +4,61 @@ using UnityEngine;
 
 public class ColliderExtended : MonoBehaviour
 {
-    public MapGraph.MapNode node;
-    public SphereCollider collider;
-    public TextMesh text;
+    public MapGraph.MapNode node; //refers to the node that the collider represents
+    //public SphereCollider collider;
+    public TextMesh text; //TextMesh Object for showing the node's properties
     bool mouseOver;
 
-    public void SetData1(MapGraph.MapNode node, SphereCollider collider) {
-        this.node = node;
-        this.collider = collider;
-        this.collider.center = node.centerPoint;
-        this.collider.radius = 4;
-       
-        mouseOver = false;
-    }
-    public void SetData2(MapGraph.MapNode node, SphereCollider collider, TextMesh text) {
-        this.node = node;
+    public void SetData(MapGraph.MapNode node, SphereCollider collider, TextMesh text) {
+        this.node = node;       
         gameObject.transform.position = node.centerPoint;
-        this.collider = collider;       
-        this.collider.radius = 4;
-        this.text = text;
+        switch (node.nodeType) {
+            case MapGraph.MapNodeType.Mountain:
+                //gameObject.transform. = 7;
+                break;
+            case MapGraph.MapNodeType.Snow:
+                Debug.Log("RAISING"); //broken, never triggered
+                collider.transform.position = new Vector3(collider.transform.position.x, 7, collider.transform.position.z);
+                break;
+            case MapGraph.MapNodeType.SaltWater:
+
+                break;
+            case MapGraph.MapNodeType.FreshWater:
+
+                break;
+        }
+        //this.collider = collider;       
+        collider.radius = 4;
+        //this.collider.radius = 4;
+        this.text = text; //setting all properties of TextMesh vvv
         this.text.alignment = TextAlignment.Center;
         this.text.anchor = TextAnchor.LowerCenter;
         this.text.fontStyle = FontStyle.Bold;
         this.text.characterSize = 5;
-        mouseOver = false;       
+        mouseOver = false;
+        
     }
+    /*
     public SphereCollider GetCollider() {
         return this.collider;
-    }   
-
-    // Update is called once per frame
+    }   */
     void Update() {
-        if(mouseOver) {
-            //Debug.Log("UPDATE");
+        if(mouseOver) { //makes the TextMesh face the camera
             text.transform.rotation = Quaternion.LookRotation(text.transform.position - Camera.main.transform.position);
         }
     }
     private void OnMouseEnter() {
         mouseOver = true;
-        this.text.text = node.nodeType.ToString();
+        if(this.text != null) {
+            this.text.text = node.nodeType.ToString();
+        }
+        
     }
     void OnMouseExit() {
         mouseOver = false;
-        this.text.text = "";
+        if (this.text != null) {
+            this.text.text = ""; //hide the inactive TextMeshes by setting their text to empty
+        }
     }
     /*
     void OnGUI() {

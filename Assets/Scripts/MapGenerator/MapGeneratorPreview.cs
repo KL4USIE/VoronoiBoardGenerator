@@ -77,9 +77,9 @@ public partial class MapGeneratorPreview : MonoBehaviour
         }
 
         if (previewType == PreviewType.Map) {
-            time = DateTime.Now;
+            //time = DateTime.Now;
             OnMeshDataReceived(MapMeshGenerator.GenerateMesh(mapGraph, heightMap, meshSize));
-            Debug.Log(string.Format("Mesh Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
+            //Debug.Log(string.Format("Mesh Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
             time = DateTime.Now;
             var texture = MapTextureGenerator.GenerateTexture(mapGraph, meshSize, textureSize, colours, drawNodeBoundries, drawDelauneyTriangles, drawNodeCenters);
