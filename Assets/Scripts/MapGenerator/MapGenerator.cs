@@ -59,6 +59,7 @@ public static class MapGenerator {
         FindSnowNodesV2(graph);
         FindDesertNodes(graph);
         FindVegetationNodes(graph);
+        FindSecondaryTypes(graph);
     }
     private static void SetAllUndetermined(MapGraph graph, ColliderManager cManager) {
         cManager.ClearColliders();
@@ -418,6 +419,32 @@ public static class MapGenerator {
             }
         }
         return;
+    }
+    private static void FindSecondaryTypes(MapGraph graph) {
+        SetWaterSecondaries(graph); 
+    }
+    private static void SetWaterSecondaries(MapGraph graph) {
+    //Sets secondary types Oasis, Cliff and Coast, combined into one iteration for performance since they are all water-based
+        foreach(var node in graph.waterNodes) {
+            int sandNeighbours = 0;          
+            foreach(var neighbourNode in node.GetNeighborNodes()) {
+                if(neighbourNode.nodeType != MapGraph.MapNodeType.SaltWater && neighbourNode.nodeType != MapGraph.MapNodeType.FreshWater) {
+                    int landNeighbours = 0;
+                    foreach(var doubleNeighbour in neighbourNode.GetNeighborNodes()) { //for Island and Peninsula
+                        if(doubleNeighbour.nodeType != MapGraph.MapNodeType.SaltWater) landNeighbours++;                       
+                    }                  
+                    if(neighbourNode.nodeType == MapGraph.MapNodeType.Mountain) { //set CoastalCliff
+                        neighbourNode.secondType = MapGraph.SecondType.CoastalCliff;
+                    } else { //set Coast
+                        neighbourNode.secondType = MapGraph.SecondType.Coast;
+                    }                    
+                }
+                if(neighbourNode.nodeType == MapGraph.MapNodeType.Sand) sandNeighbours++;//oasis                              
+            }
+            if(sandNeighbours >= 4) { //set Oasis
+                node.secondType = MapGraph.SecondType.Oasis;
+            }
+        }
     }
     //NOT ADDED BY NOTH
     private static void SetEdgesToWater(MapGraph graph) {

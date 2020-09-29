@@ -24,6 +24,8 @@ public partial class MapGraph
         public MapNodeHalfEdge startEdge { get; set; }
 
         public MapNodeType nodeType { get; set; }
+        //ADDED BY NOTH
+        public SecondType secondType { get; set; }
 
         public IEnumerable<MapNodeHalfEdge> GetEdges()
         {

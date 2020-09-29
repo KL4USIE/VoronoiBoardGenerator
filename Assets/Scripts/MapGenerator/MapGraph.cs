@@ -31,7 +31,13 @@ public partial class MapGraph
         Steppe, //southern grass becomes steppe instead
         Highland //southern Snow becomes highland instead
     }
-
+    //ADDED BY NOTH
+    public enum SecondType {
+        nothing,
+        Oasis,
+        Coast,
+        CoastalCliff
+    }
     public Rect plotBounds;
 
     /// <summary>

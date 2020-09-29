@@ -51,6 +51,9 @@ public class ColliderExtended : MonoBehaviour
         mouseOver = true;
         if(this.text != null) {
             this.text.text = node.nodeType.ToString();
+            if(node.secondType != MapGraph.SecondType.nothing) {
+                this.text.text += "\n" + node.secondType.ToString();
+            }
         }
         
     }
