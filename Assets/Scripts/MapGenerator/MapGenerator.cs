@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Delaunay;
+//--Class purpose-- 
+//Generates types for each node.
 
 public static class MapGenerator {
     public static void GenerateMap(MapGraph graph, int landConnectionCycles, int genVersion, int mountainReductionCycles, ColliderManager cManager) {
@@ -60,26 +62,16 @@ public static class MapGenerator {
         FindDesertNodes(graph);
         FindVegetationNodes(graph);
         FindSecondaryTypes(graph);
+        FindRivers(graph, 5);
     }
     private static void SetAllUndetermined(MapGraph graph, ColliderManager cManager) {
         cManager.ClearColliders();
         foreach(var node in graph.nodesByCenterPosition.Values) {
             node.nodeType = MapGraph.MapNodeType.Undetermined;
             graph.undetNodes.Add(node);
-            /*
-            PolygonCollider2D collider = new PolygonCollider2D();
-            List<Vector2> vecList = new List<Vector2>();
-            foreach(var point in node.GetCorners()) {
-                vecList.Add(new Vector2(point.position.x, point.position.z));
-            }
-            Vector2[] pointArray = vecList.ToArray();
-            collider.points = pointArray;
-            graph.colliderList.Add(new ColliderExtended(node, collider));
-            */
             if(cManager != null) {
                 cManager.AddCollider(node);
-            }
-           
+            }        
         }
     }   
     private static void FindWaterNodesV1(MapGraph graph, int landConnectionCycles) { //Places Water completely randomly, then optionally removes some thats sorrounded by land
@@ -253,11 +245,8 @@ public static class MapGenerator {
                 graph.mountainNodes.Add(node);
             }*/
         }
-
         ReduceMountains(graph, mountainConnectionCycles);
         ConnectMountains(graph, mountainConnectionCycles);
-
-
     }
     private static void ConnectMountains(MapGraph graph, int connectionCycles) {
         for (int i = 0; i < connectionCycles; i++) { //remove water sorrounded by land to make landmasses more coherent, impacted by Land Connection Cycles

@@ -10,9 +10,6 @@ public partial class MapGraph
     /// </summary>
     public class MapNode
     {
-        //ADDED BY NOTH
-        //public Delaunay.Site site { get; set; }
-        //public EdgeCollider2D collider;
 
         private float? _heightDifference;
         private Rect? _boundingRectangle;
@@ -24,8 +21,8 @@ public partial class MapGraph
         public MapNodeHalfEdge startEdge { get; set; }
 
         public MapNodeType nodeType { get; set; }
-        //ADDED BY NOTH
-        public SecondType secondType { get; set; }
+        
+        public SecondType secondType { get; set; } //ADDED BY NOTH
 
         public IEnumerable<MapNodeHalfEdge> GetEdges()
         {

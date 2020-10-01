@@ -13,7 +13,6 @@ public partial class MapGraph
     public List<MapGraph.MapNode> mountainNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> snowNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> sandNodes = new List<MapGraph.MapNode>();
-    public List<ColliderExtended> colliderList;
 
     public enum MapNodeType
     {
@@ -33,11 +32,13 @@ public partial class MapGraph
     }
     //ADDED BY NOTH
     public enum SecondType {
-        nothing,
-        Oasis,
-        Coast,
-        CoastalCliff
+        nothing, //default type
+        Oasis, //for freshwater in deserts
+        Coast, //for all tiles sorrounding SaltWater
+        CoastalCliff //For Mountains adjacent to SaltWater
     }
+
+
     public Rect plotBounds;
 
     /// <summary>

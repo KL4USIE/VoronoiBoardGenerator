@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Profiling;
-
+//--Class purpose-- 
+//Manages map generation
+//Calls the generators for each component
+//Provides an interface in the Inspector
 public partial class MapGeneratorPreview : MonoBehaviour
 {
     [Header("Settings")]
@@ -42,6 +45,9 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public MeshCollider meshCollider;
     public ColliderManager colliderManager;
 
+    [Header("Links")]
+    public PathFinder pathFinder;
+
     public void Start() {
         StartCoroutine(GenerateMapAsync());
     }
@@ -54,39 +60,33 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public void GenerateMap() {
         var startTime = DateTime.Now;
         var points = GetPoints();
-
         var time = DateTime.Now;
         var voronoi = new Delaunay.Voronoi(points, null, new Rect(0, 0, meshSize, meshSize), relaxationIterations);
-        Debug.Log(string.Format("Voronoi Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
-             
+        Debug.Log(string.Format("Voronoi Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));             
         //time = DateTime.Now;
         var mapGraph = new MapGraph(voronoi, snapDistance);
         //Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
-
         time = DateTime.Now;
         MapGenerator.GenerateMap(mapGraph, V1_LandConnectionCycles, PropertyGenVersion, MountainReductionCycles, colliderManager);
         Debug.Log(string.Format("Map Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
-
         //time = DateTime.Now;
         var heightMap = HeightMapGenerator.GenerateHeightMapFlat(meshSize, meshSize, mapGraph);
-        //Debug.Log(string.Format("Heightmap Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
-        
+        //Debug.Log(string.Format("Heightmap Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));       
         if (previewType == PreviewType.HeightMap) {
             OnMeshDataReceived(MapMeshGenerator.GenerateMesh(mapGraph, heightMap, meshSize));
             UpdateTexture(TextureGenerator.TextureFromHeightMap(heightMap));
         }
-
         if (previewType == PreviewType.Map) {
             //time = DateTime.Now;
             OnMeshDataReceived(MapMeshGenerator.GenerateMesh(mapGraph, heightMap, meshSize));
             //Debug.Log(string.Format("Mesh Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
-
             time = DateTime.Now;
             var texture = MapTextureGenerator.GenerateTexture(mapGraph, meshSize, textureSize, colours, drawNodeBoundries, drawDelauneyTriangles, drawNodeCenters);
             Debug.Log(string.Format("Texture Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
             UpdateTexture(texture);
         }
+        pathFinder.SetGraph(mapGraph);
         Debug.Log(string.Format("Finished Generating World: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
     }
 
@@ -118,7 +118,6 @@ public partial class MapGeneratorPreview : MonoBehaviour
                 }
             }
         }
-
         return points;
     }
 
