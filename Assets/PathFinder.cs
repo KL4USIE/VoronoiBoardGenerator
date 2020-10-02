@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 //--Class purpose-- 
 //Finds the shortest path between two nodes
 //Nodes are set using Q and E
@@ -21,7 +22,7 @@ public class PathFinder : MonoBehaviour {
     void Update() {
         if(Input.GetKeyDown(KeyCode.Q)) {     
             fromNode = cManager.GetActiveNode();             
-            Debug.Log("PATHFINDER: SET START");
+            Debug.Log("PATHFINDER: SET start");
             if(fromNode == toNode) {
                 toNode = null;
             }
@@ -37,7 +38,7 @@ public class PathFinder : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.E)) {
             toNode = cManager.GetActiveNode();
-            Debug.Log("PATHFINDER: SET END");
+            Debug.Log("PATHFINDER: Set end");
             if (toNode == fromNode) {
                 fromNode = null;
             }
@@ -45,7 +46,9 @@ public class PathFinder : MonoBehaviour {
                 List<DjikstraNode> path = GetShortestPath();
             }
         }
-
+        if (Input.GetKeyDown(KeyCode.R)) {
+            
+        }
     }
     List<MapGraph.MapNode> FindShortestPath() {
         if(fromNode == null || toNode == null) {
@@ -69,6 +72,7 @@ public class PathFinder : MonoBehaviour {
 
     }
     public List<DjikstraNode> GetShortestPath() {
+        Debug.Log("PATHFINDER: Calculating path");
         start = new DjikstraNode(fromNode);
         end = new DjikstraNode(toNode);
         DijkstraSearch();
@@ -83,6 +87,7 @@ public class PathFinder : MonoBehaviour {
         list.Add(node.nearestToStart);
         BuildShortestPath(list, node.nearestToStart);
     }
+    /*
     public int CompareNodesByMinCostToStart(DjikstraNode x, DjikstraNode y) {
         if(x.minCostToStart == y.minCostToStart)  return 0;       
         if(x.minCostToStart > y.minCostToStart) {
@@ -95,34 +100,33 @@ public class PathFinder : MonoBehaviour {
             return -1;
         } else return 1;   
     }
+    */
     private void DijkstraSearch() {
         start.minCostToStart = 0;
         List<DjikstraNode> prioQueue = new List<DjikstraNode>();
         prioQueue.Add(start);
         do {
-            prioQueue.Sort(CompareNodesByMinCostToStart);
-            var node = prioQueue[0];
+            //prioQueue.Sort(CompareNodesByMinCostToStart);
+            prioQueue = prioQueue.OrderBy(x => x.minCostToStart).ToList();
+            DjikstraNode node = prioQueue.First();
             prioQueue.Remove(node);
+            Debug.Log("prioQueue length: "+prioQueue.Count);
             List<DjikstraNode> neighbourList = new List<DjikstraNode>();
-            foreach(var neighbourNode in node.node.GetNeighborNodes()) {
+            foreach (var neighbourNode in node.node.GetNeighborNodes()) {
                 neighbourList.Add(new DjikstraNode(neighbourNode));
             }
-            neighbourList.Sort(CompareNodesByCost);
-            foreach (var cnn in neighbourList) {
-                var childNode = cnn;
-                if (childNode.visited)
-                    continue;
-                if (childNode.minCostToStart == 99 ||
-                    node.minCostToStart + cnn.cost < childNode.minCostToStart) {
-                    childNode.minCostToStart = node.minCostToStart + cnn.cost;
+            //neighbourList.Sort(CompareNodesByCost);
+            foreach (var childNode in neighbourList.OrderBy(x => x.cost)) {
+               //var childNode = cnn;
+                if (childNode.visited) continue;
+                if (childNode.minCostToStart == 99 || node.minCostToStart + childNode.cost < childNode.minCostToStart) {
+                    childNode.minCostToStart = node.minCostToStart + childNode.cost;
                     childNode.nearestToStart = node;
-                    if (!prioQueue.Contains(childNode))
-                        prioQueue.Add(childNode);
+                    if (!prioQueue.Contains(childNode)) prioQueue.Add(childNode);
                 }
             }
             node.visited = true;
-            if (node == end)
-                return;
-        } while (prioQueue.Count > 0);
+            if (node == end) return;
+        } while (prioQueue.Any());
     }
 }
