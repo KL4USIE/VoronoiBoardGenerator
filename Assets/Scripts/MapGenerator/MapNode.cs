@@ -21,16 +21,23 @@ public partial class MapGraph
         public MapNodeHalfEdge startEdge { get; set; }
 
         public MapNodeType nodeType { get; set; }
-        
-        public SecondType secondType { get; set; } //ADDED BY NOTH
-
-        public IEnumerable<MapNodeHalfEdge> GetEdges()
-        {
+        //ADDED BY NOTH
+        public SecondType secondType { get; set; }
+        public int cost = 1; //Dijkstra-related variables
+        public bool visited = false;
+        public int minCostToStart = 99;
+        public MapNode nearestToStart = null;
+        public void ResetDijkstra() {
+            minCostToStart = 99;
+            nearestToStart = null;
+            cost = 1;
+            visited = false;
+        }
+        public IEnumerable<MapNodeHalfEdge> GetEdges() {
             yield return startEdge;
 
             var next = startEdge.next;
-            while(next != startEdge)
-            {
+            while(next != startEdge) {
                 yield return next;
                 next = next.next;
             }
