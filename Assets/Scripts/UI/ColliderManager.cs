@@ -39,9 +39,5 @@ public class ColliderManager : MonoBehaviour {
             mapGenerator.seed = (int)Random.Range(0, 100);
             mapGenerator.Start();
         }
-        GUI.Label(new Rect(10, 45, 160, 60), "Q - Set start node \n" +
-                                             "E - Set target node \n" +
-                                             "R - Reset markers");
-
     }
 }
