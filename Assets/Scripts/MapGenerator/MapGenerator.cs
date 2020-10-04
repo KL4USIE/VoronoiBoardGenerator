@@ -150,7 +150,7 @@ public static class MapGenerator {
                     foreach (MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) { //Expand freshwater
                         if (CheckLake(graph, neighbourNode) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //
                             neighbourNode.nodeType = MapGraph.MapNodeType.FreshWater;
-                            node.cost = 2;
+                            neighbourNode.cost = 2;
                             graph.waterNodes.Add(neighbourNode); //add water   
                             graph.undetNodes.Remove(neighbourNode); //remove undet
                         }

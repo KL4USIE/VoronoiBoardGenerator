@@ -12,6 +12,7 @@ public class PathFinder : MonoBehaviour {
     MapGraph.MapNode toNode = null; //saves target-node    
     public ColliderManager cManager; //for getting highlighted nodes
     List<GameObject> markerObjects = new List<GameObject>(); //list of the spawned objects, for later deletion
+    bool ignoreCost = false;
 
     public void SetGraph(MapGraph graph) {
         this.graph = graph;
@@ -42,6 +43,12 @@ public class PathFinder : MonoBehaviour {
             toNode = null;
             ClearMarkers();
         }
+        if (Input.GetKeyDown(KeyCode.T)) { //reset pathfinder
+            ignoreCost = !ignoreCost;
+            if (fromNode != null && toNode != null) {
+                List<MapGraph.MapNode> path = GetShortestPath();
+            }
+        }
     }
     public void ClearMarkers() { //deletes all generated markers by destroying their gameobjects; used for cleanup of old generation
         foreach (GameObject obj in markerObjects) {
@@ -65,7 +72,9 @@ public class PathFinder : MonoBehaviour {
         foreach(var node in graph.nodesByCenterPosition.Values) { //reset 
             node.ResetDijkstra();
         }
-        DijkstraSearch();
+        if(ignoreCost) DijkstraSearchIgnoreCost();
+        else DijkstraSearch();
+
         var shortestPath = new List<MapGraph.MapNode>();
         shortestPath.Add(toNode);
         BuildShortestPath(shortestPath, toNode);
@@ -106,5 +115,42 @@ public class PathFinder : MonoBehaviour {
             node.visited = true;
             if (node == toNode) return;
         } while (prioQueue.Any());
+    }
+    private void DijkstraSearchIgnoreCost() { //assigns each node the Dijkstra related variables
+        fromNode.minCostToStart = 0;
+        List<MapGraph.MapNode> prioQueue = new List<MapGraph.MapNode>();
+        prioQueue.Add(fromNode);
+        do {
+            prioQueue = prioQueue.OrderBy(x => x.minCostToStart).ToList();
+            MapGraph.MapNode node = prioQueue.First();
+            prioQueue.Remove(node);
+            //Debug.Log("prioQueue length: "+prioQueue.Count);        
+            foreach (var childNode in node.GetNeighborNodes().OrderBy(x => x.cost)) {
+                if (childNode.visited) continue;
+                if (childNode.minCostToStart == 99 || node.minCostToStart + 1 < childNode.minCostToStart) {
+                    childNode.minCostToStart = node.minCostToStart + 1;
+                    childNode.nearestToStart = node;
+                    if (!prioQueue.Contains(childNode)) prioQueue.Add(childNode);
+                }
+            }
+            node.visited = true;
+            if (node == toNode) return;
+        } while (prioQueue.Any());
+    }
+    private void OnGUI() {
+        if(ignoreCost) {
+            GUI.Label(new Rect(10, 45, 220, 100), "Q - Set start node \n" +
+                                             "E - Set target node \n" +
+                                             "R - Reset markers \n" +
+                                             "T - Toggle Cost-ignorance \n" +
+                                             "Cost is being ignored");
+        } else {
+            GUI.Label(new Rect(10, 45, 220, 80), "Q - Set start node \n" +
+                                             "E - Set target node \n" +
+                                             "R - Reset markers \n" +
+                                             "T - Toggle Cost-ignorance");
+        }
+        
+        
     }
 }
