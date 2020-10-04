@@ -30,7 +30,6 @@ public partial class MapGraph
         public void ResetDijkstra() {
             minCostToStart = 99;
             nearestToStart = null;
-            cost = 1;
             visited = false;
         }
         public IEnumerable<MapNodeHalfEdge> GetEdges() {

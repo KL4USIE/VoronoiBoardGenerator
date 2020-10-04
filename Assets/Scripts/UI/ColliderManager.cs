@@ -34,9 +34,14 @@ public class ColliderManager : MonoBehaviour {
         colliderObjects.Clear();      
     }
     private void OnGUI() {
+        GUI.skin.label.fontSize = 16;
         if (GUI.Button(new Rect(10, 10, 160, 30), "Generate Random Seed")) { //Button that trigger random seed generation
             mapGenerator.seed = (int)Random.Range(0, 100);
             mapGenerator.Start();
         }
+        GUI.Label(new Rect(10, 45, 160, 60), "Q - Set start node \n" +
+                                             "E - Set target node \n" +
+                                             "R - Reset markers");
+
     }
 }

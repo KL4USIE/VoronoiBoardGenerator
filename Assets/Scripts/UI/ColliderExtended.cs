@@ -12,22 +12,27 @@ public class ColliderExtended : MonoBehaviour {
     ColliderManager cManager;
 
     public void SetData(MapGraph.MapNode node, SphereCollider collider, TextMesh text, ColliderManager cManager) {
-        this.node = node;
+        this.node = node; //^used instead of a constructor
         this.cManager = cManager;
         gameObject.transform.position = node.centerPoint;
-        switch (node.nodeType) { //broken, never triggered
+        switch (node.nodeType) {
             case MapGraph.MapNodeType.Mountain:
-                collider.transform.position = new Vector3(collider.transform.position.x, 3, collider.transform.position.z);
+                //Debug.Log("IS MOUNTAIN");
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, 2, gameObject.transform.position.z);
                 break;
             case MapGraph.MapNodeType.Snow:
-                Debug.Log("RAISING"); 
-                collider.transform.position = new Vector3(collider.transform.position.x, 7, collider.transform.position.z);
+                //Debug.Log("RAISING"); 
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, 5, gameObject.transform.position.z);
+                break;
+            case MapGraph.MapNodeType.Highland:
+                //Debug.Log("RAISING"); 
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, 5, gameObject.transform.position.z);
                 break;
             case MapGraph.MapNodeType.SaltWater:
-
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, -7, gameObject.transform.position.z);
                 break;
             case MapGraph.MapNodeType.FreshWater:
-
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, -7, gameObject.transform.position.z);
                 break;
         }      
         collider.radius = 4;
@@ -52,6 +57,7 @@ public class ColliderExtended : MonoBehaviour {
             if(node.secondType != MapGraph.SecondType.nothing) { //if a second type is set, display it
                 this.text.text += "\n" + node.secondType.ToString();
             }
+            this.text.text += "\nCost: " + node.cost; //Display cost
         }       
     }
     void OnMouseExit() {

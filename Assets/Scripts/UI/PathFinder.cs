@@ -5,30 +5,29 @@ using System.Linq;
 //--Class purpose-- 
 //Finds the shortest path between two nodes
 //Nodes are set using Q and E
+//R resets the inputs
 public class PathFinder : MonoBehaviour {
     MapGraph graph; //reference to MapGraph for getting nodes
     MapGraph.MapNode fromNode = null; //saves start-node
     MapGraph.MapNode toNode = null; //saves target-node    
     public ColliderManager cManager; //for getting highlighted nodes
-    List<GameObject> markerObjects = new List<GameObject>();
+    List<GameObject> markerObjects = new List<GameObject>(); //list of the spawned objects, for later deletion
 
     public void SetGraph(MapGraph graph) {
         this.graph = graph;
     }
-    // Update is called once per frame
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Q)) {     
+        if(Input.GetKeyDown(KeyCode.Q)) { //set start    
             fromNode = cManager.GetActiveNode();             
-            Debug.Log("PATHFINDER: SET start");
+            Debug.Log("PATHFINDER: Set start");
             if(fromNode == toNode) {
                 toNode = null;
             }
-            if(fromNode != null && toNode != null) {
-                Debug.Log("PATHFINDER: FINDING PATH");
+            if(fromNode != null && toNode != null) {               
                 GetShortestPath(); //also returns shortest path
             }           
         }
-        if (Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetKeyDown(KeyCode.E)) { //set target
             toNode = cManager.GetActiveNode();
             Debug.Log("PATHFINDER: Set end");
             if (toNode == fromNode) {
@@ -38,8 +37,10 @@ public class PathFinder : MonoBehaviour {
                 List<MapGraph.MapNode> path = GetShortestPath();
             }
         }
-        if (Input.GetKeyDown(KeyCode.R)) {
-            
+        if (Input.GetKeyDown(KeyCode.R)) { //reset pathfinder
+            fromNode = null;
+            toNode = null;
+            ClearMarkers();
         }
     }
     public void ClearMarkers() { //deletes all generated markers by destroying their gameobjects; used for cleanup of old generation
@@ -68,15 +69,17 @@ public class PathFinder : MonoBehaviour {
         var shortestPath = new List<MapGraph.MapNode>();
         shortestPath.Add(toNode);
         BuildShortestPath(shortestPath, toNode);
-        shortestPath.Reverse();
+        shortestPath.Reverse();     
+        SpawnMarkers(shortestPath);
+        //ShortestPathToString(shortestPath);
+        return shortestPath;
+    }
+    private void ShortestPathToString(List<MapGraph.MapNode> shortestPath) {
         string output = "Coordinates: ";
         foreach (var node in shortestPath) {
-            output += "(" + node.centerPoint.x + " " + node.centerPoint.z + "), ";          
+            output += "(" + node.centerPoint.x + " " + node.centerPoint.z + "), ";
         }
-        SpawnMarkers(shortestPath);
-        //Debug.Log("Path length: "+ shortestPath.Count);
         Debug.Log(output);
-        return shortestPath;
     }
     private void BuildShortestPath(List<MapGraph.MapNode> list, MapGraph.MapNode node) { //sorts the nodes according to the Dijkstra variables
         if (node.nearestToStart == null) return;
