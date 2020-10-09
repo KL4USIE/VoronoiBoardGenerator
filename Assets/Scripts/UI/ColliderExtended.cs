@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//--Class purpose-- 
-//Contains UI logic for each node
-//Instances are attached to the gameobjects generated under UI->ColliderContainer
-//Responsible for the Mouseover text popup
+/// <summary>
+/// Contains UI logic for each node
+/// Instances are attached to the gameobjects generated under UI->ColliderContainer
+/// Responsible for the Mouseover text popup
+/// </summary>
 public class ColliderExtended : MonoBehaviour {
     public MapGraph.MapNode node; //refers to the node that the collider represents
     public TextMesh text; //TextMesh Object for showing the node's properties
@@ -60,7 +61,7 @@ public class ColliderExtended : MonoBehaviour {
             this.text.text += "\nCost: " + node.cost; //Display cost
         }       
     }
-    void OnMouseExit() {
+    private void OnMouseExit() {
         mouseOver = false;
         if (this.text != null) {
             this.text.text = ""; //hide the inactive TextMeshes by setting their text to empty

@@ -45,7 +45,7 @@ public static class HeightMapGenerator {
     //ADDED BY NOTH
     public static HeightMap GenerateHeightMapFlat(int width, int height, MapGraph graph) {
         //Debug.Log("ARRAY DIMENSIONS: " + width + " " + height);
-        float[,] values = new float[width, height];
+        float[,] values = new float[width+1, height+1];
         //Debug.Log("Heightmap resolution: "+width+" x "+height);
         values = RaiseMountains(graph.mountainNodes, graph, values); //handing over graph.mountainNodes is redundant, leaving for WIP
         values = RaiseSnow(graph.snowNodes, graph, values);
@@ -97,26 +97,17 @@ public static class HeightMapGenerator {
                 List<MapGraph.MapNode> nodeList = new List<MapGraph.MapNode>(corner.GetNodes()); //fixed a bug where corners that...
                 bool allowLowering = true; //also cornered on landnodes sometimes got lowered. Now checking all nodes adjacent to qualifying corners to confirm they are sorrounded by water
                 //Debug.Log("CORNER: " + corner.position.x + " " + corner.position.z);
-                foreach(var neighbourNode in nodeList) {
+                foreach(var adjNode in nodeList) {
                     //Debug.Log("NODE: " + neighbourNode.centerPoint.x + " " + neighbourNode.centerPoint.z);
-                    if (neighbourNode.nodeType != MapGraph.MapNodeType.SaltWater && neighbourNode.nodeType != MapGraph.MapNodeType.FreshWater) {
+                    if (adjNode.nodeType != MapGraph.MapNodeType.SaltWater && adjNode.nodeType != MapGraph.MapNodeType.FreshWater) {
                          allowLowering = false;                              
                     }
                 }
                 if(allowLowering) {
                     Vector2Int coords = new Vector2Int((int)corner.position.x, (int)corner.position.z);
                     //Debug.Log(values.Length);
-                    if(coords.x == 400) {
-                        //Debug.Log("lowered");
-                        coords.x = 399;
-                    }
-                    if (coords.y == 400) {
-                        coords.y = 399;
-                    }
-                    //Debug.Log((int)corner.position.x +" "+ (int)corner.position.z);
-                    //values[(int)corner.position.x, (int)corner.position.z] = -8;                   
-                    values[coords.x, coords.y] = -8;
-                                          
+                    //Debug.Log((int)corner.position.x +" "+ (int)corner.position.z);                  
+                    values[coords.x, coords.y] = -8;                                       
                 }
             }                            
         }
