@@ -447,10 +447,12 @@ public static class MapGenerator {
                     foreach(var doubleNeighbour in neighbourNode.GetNeighborNodes()) { //for Island and Peninsula
                         if(doubleNeighbour.nodeType != MapGraph.MapNodeType.SaltWater) landNeighbours++;                       
                     }                  
-                    if(neighbourNode.nodeType == MapGraph.MapNodeType.Mountain) { //set CoastalCliff
+                    if(neighbourNode.nodeType == MapGraph.MapNodeType.Mountain && neighbourNode.secondType != MapGraph.SecondType.CoastalCliff) { //set CoastalCliff
                         neighbourNode.secondType = MapGraph.SecondType.CoastalCliff;
-                    } else { //set Coast
+                        neighbourNode.cost += 1;
+                    } else if(neighbourNode.secondType != MapGraph.SecondType.Coast) { //set Coast
                         neighbourNode.secondType = MapGraph.SecondType.Coast;
+                        neighbourNode.cost += 1;
                     }                    
                 }
                 if(neighbourNode.nodeType == MapGraph.MapNodeType.Sand) sandNeighbours++;//oasis                              

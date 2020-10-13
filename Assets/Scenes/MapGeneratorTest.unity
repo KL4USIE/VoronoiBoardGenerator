@@ -282,7 +282,7 @@ MonoBehaviour:
   V1_LandConnectionCycles: 2
   MountainReductionCycles: 2
   PropertyGenVersion: 3
-  meshSize: 400
+  meshSize: 600
   textureSize: 4096
   drawNodeBoundries: 1
   drawDelauneyTriangles: 0
@@ -302,16 +302,14 @@ MonoBehaviour:
     color: {r: 0.8569961, g: 0.8680498, b: 0.8897059, a: 1}
   - type: 3
     color: {r: 0.5943396, g: 0.49146873, b: 0.43173727, a: 1}
-  - type: 4
-    color: {r: 0.4784314, g: 0.49411768, b: 0.47450984, a: 1}
+  - type: 12
+    color: {r: 0.48235297, g: 0.41960788, b: 0.3803922, a: 1}
   - type: 9
     color: {r: 0.37418786, g: 0.5849056, b: 0.32556066, a: 1}
   - type: 10
     color: {r: 0.19111006, g: 0.4056604, b: 0.14159843, a: 1}
   - type: 11
     color: {r: 0.6415094, g: 0.5376899, b: 0.32680666, a: 1}
-  - type: 12
-    color: {r: 0.4811321, g: 0.41795686, b: 0.3812745, a: 1}
   pointGeneration: 1
   pointSpacing: 10
   relaxationIterations: 0
