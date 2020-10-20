@@ -73,7 +73,7 @@ public static class MapGenerator {
         }
     }
     private static void SetAllUndetermined(MapGraph graph, ColliderManager cManager) {
-        cManager.ClearColliders();
+        if(cManager != null) cManager.ClearColliders();
         foreach(var node in graph.nodesByCenterPosition.Values) {
             node.nodeType = MapGraph.MapNodeType.Undetermined;
             graph.undetNodes.Add(node);
@@ -372,7 +372,7 @@ public static class MapGenerator {
             }
             if (waterNeighbours >= 4) {
                 node.nodeType = MapGraph.MapNodeType.Sand;
-
+                node.cost = 1;
                 graph.undetNodes.Remove(node);
             }
         }
@@ -381,6 +381,7 @@ public static class MapGenerator {
         foreach (var node in new List<MapGraph.MapNode>(graph.undetNodes)) {
             if(node.centerPoint.z <= (graph.GetCenter().z * 0.6) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.06) { //if below horizontal center, meaning Deserts will only generate in the south; propability for desert spawn
                 node.nodeType = MapGraph.MapNodeType.Sand;
+                node.cost = 1;
                 graph.sandNodes.Add(node); //add sand
                 graph.undetNodes.Remove(node); //remove undet
                 SandNodeRecursion(graph, node.GetNeighborNodes(), 1.0); //begin recursion
@@ -392,6 +393,7 @@ public static class MapGenerator {
             foreach (MapGraph.MapNode node in nodeList) {
                 if (node.nodeType == MapGraph.MapNodeType.Undetermined && UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
                     node.nodeType = MapGraph.MapNodeType.Sand;
+                    node.cost = 1;
                     graph.sandNodes.Add(node); //add water
                     graph.undetNodes.Remove(node); //remove undet
                     SandNodeRecursion(graph, node.GetNeighborNodes(), (propability - 0.3));                   
@@ -666,6 +668,7 @@ public static class MapGenerator {
                     if (neighbor.nodeType == MapGraph.MapNodeType.SaltWater) {
                         if (node.GetHeightDifference() < 0.8f) {
                             node.nodeType = MapGraph.MapNodeType.Sand;
+                            node.cost = 1;
                         }
                         break;
                     }

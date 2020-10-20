@@ -16,18 +16,18 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public int seed = 0;
     public bool autoUpdate;
     [Range(0, 3)]
-    public int V1_LandConnectionCycles = 2;
+    public int v1_LandConnectionCycles = 2;
     [Range(0, 3)]
-    public int MountainReductionCycles = 2;
+    public int mountainReductionCycles = 2;
     [Range(1, 3)]
-    public int PropertyGenVersion = 1;
+    public int propertyGenVersion = 1;
 
     [Header("Mesh Settings")]
     public int meshSize = 200;
 
     [Header("Texture Settings")]
     public int textureSize = 512;
-    public bool drawNodeBoundries;
+    public bool drawNodeBoundaries;
     public bool drawDelauneyTriangles;
     public bool drawNodeCenters;
     
@@ -42,11 +42,11 @@ public partial class MapGeneratorPreview : MonoBehaviour
     [Header("Outputs")]
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
-    public MeshCollider meshCollider;
-    public ColliderManager colliderManager;
+    public MeshCollider meshCollider;   
 
     [Header("Links")]
     public PathFinder pathFinder;
+    public ColliderManager colliderManager;
 
     public void Start() {
         StartCoroutine(GenerateMapAsync());
@@ -67,7 +67,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
         var mapGraph = new MapGraph(voronoi, snapDistance);
         //Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
         time = DateTime.Now;
-        MapGenerator.GenerateMap(mapGraph, V1_LandConnectionCycles, PropertyGenVersion, MountainReductionCycles, colliderManager);
+        MapGenerator.GenerateMap(mapGraph, v1_LandConnectionCycles, propertyGenVersion, mountainReductionCycles, colliderManager);
         Debug.Log(string.Format("Map Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
         //time = DateTime.Now;
         var heightMap = HeightMapGenerator.GenerateHeightMapFlat(meshSize, meshSize, mapGraph);
@@ -81,7 +81,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
             OnMeshDataReceived(MapMeshGenerator.GenerateMesh(mapGraph, heightMap, meshSize));
             //Debug.Log(string.Format("Mesh Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
             time = DateTime.Now;
-            var texture = MapTextureGenerator.GenerateTexture(mapGraph, meshSize, textureSize, colours, drawNodeBoundries, drawDelauneyTriangles, drawNodeCenters);
+            var texture = MapTextureGenerator.GenerateTexture(mapGraph, meshSize, textureSize, colours, drawNodeBoundaries, drawDelauneyTriangles, drawNodeCenters);
             Debug.Log(string.Format("Texture Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));
 
             UpdateTexture(texture);

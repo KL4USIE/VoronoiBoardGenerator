@@ -5,6 +5,7 @@ using System.Linq;
 
 /// <summary>
 /// Finds the shortest path between two nodes
+/// Also responsible for some GUI
 /// Nodes are set using Q and E
 /// R resets the inputs
 /// T toggles ignoring individual node costs
@@ -22,7 +23,13 @@ public class PathFinder : MonoBehaviour {
     public ColliderManager cManager; //for getting highlighted nodes
     List<GameObject> markerObjects = new List<GameObject>(); //list of the spawned objects, for later deletion
     bool ignoreCost = false;
+    bool showCostRules = false;
+    GUIStyle guiStyle = new GUIStyle(); //for OnGUI()
 
+    public void Start() {
+        guiStyle.fontSize = 25;
+        guiStyle.fontStyle = new FontStyle();
+    }
     public void SetGraph(MapGraph graph) {
         this.graph = graph;
     }
@@ -51,6 +58,9 @@ public class PathFinder : MonoBehaviour {
             fromNode = null;
             toNode = null;
             ClearMarkers();
+        }
+        if (Input.GetKeyDown(KeyCode.F)) { //toggle rule textbox
+            showCostRules = !showCostRules;
         }
         if (Input.GetKeyDown(KeyCode.T)) { //toggle cost-ignorance
             ignoreCost = !ignoreCost;
@@ -178,16 +188,27 @@ public class PathFinder : MonoBehaviour {
     /// </summary>
     private void OnGUI() {
         if(ignoreCost) {
-            GUI.Label(new Rect(10, 45, 220, 100), "Q - Set start node \n" +
-                                             "E - Set target node \n" +
-                                             "R - Reset markers \n" +
-                                             "T - Toggle Cost-ignorance \n" +
-                                             "Cost is being ignored");
+            GUI.Label(new Rect(10, 45, 200, 120), "Q - Set start node \n" +
+                                                  "E - Set target node \n" +
+                                                  "R - Reset markers \n" +
+                                                  "F - Toggle Cost Rules \n" + 
+                                                  "T - Toggle Cost-ignorance \n" +
+                                                  "Cost is being ignored");
         } else {
-            GUI.Label(new Rect(10, 45, 220, 80), "Q - Set start node \n" +
-                                             "E - Set target node \n" +
-                                             "R - Reset markers \n" +
-                                             "T - Toggle Cost-ignorance");
-        }        
+            GUI.Label(new Rect(10, 45, 200, 120), "Q - Set start node \n" +
+                                                 "E - Set target node \n" +
+                                                 "R - Reset markers \n" +
+                                                 "F - Toggle Cost Rules \n" +
+                                                 "T - Toggle Cost-ignorance");
+        }      
+        if(showCostRules) {
+            GUI.Label(new Rect(210, 10, 400, 120), "1-Cost Types: Grass, Steppe, Sand \n" +
+                                                   "2-Cost Types: Forest, PineForest, SaltWater, FreshWater \n" +
+                                                   "3-Cost Types: Mountain, Highland \n" +
+                                                   "4-Cost Types: Snow \n" +
+                                                   "Secondary type Coast adds +1 cost.", 
+                                                   guiStyle);
+
+        }
     }
 }

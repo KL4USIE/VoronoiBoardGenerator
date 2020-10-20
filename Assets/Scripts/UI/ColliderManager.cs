@@ -19,12 +19,8 @@ public class ColliderManager : MonoBehaviour {
     public void AddCollider(MapGraph.MapNode node) { //for generating a collider for each node
         GameObject colliderContainer = new GameObject();
         colliderContainer.transform.parent = this.transform; //sets as child in scene hierarchy
-        SphereCollider collider = new SphereCollider();
-        colliderContainer.AddComponent<SphereCollider>();
-        colliderContainer.AddComponent<ColliderExtended>();
-        colliderContainer.AddComponent<TextMesh>();
-        colliderContainer.GetComponent<ColliderExtended>().SetData(node, colliderContainer.GetComponent<SphereCollider>(), colliderContainer.GetComponent<TextMesh>(), this);
-        colliderContainer.layer = 5;
+        ColliderExtended cExt = colliderContainer.AddComponent(typeof(ColliderExtended)) as ColliderExtended;
+        cExt.SetData(node, this);                      
         colliderObjects.Add(colliderContainer);
     }
     public void ClearColliders() { //deletes all generated colliders by destroying their gameobjects; used for cleanup of old generation

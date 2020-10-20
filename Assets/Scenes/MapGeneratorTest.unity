@@ -279,12 +279,12 @@ MonoBehaviour:
   previewType: 0
   seed: 7
   autoUpdate: 0
-  V1_LandConnectionCycles: 2
-  MountainReductionCycles: 2
-  PropertyGenVersion: 3
+  v1_LandConnectionCycles: 2
+  mountainReductionCycles: 2
+  propertyGenVersion: 3
   meshSize: 600
   textureSize: 4096
-  drawNodeBoundries: 1
+  drawNodeBoundaries: 0
   drawDelauneyTriangles: 0
   drawNodeCenters: 1
   colours:
@@ -317,8 +317,8 @@ MonoBehaviour:
   meshFilter: {fileID: 90414407}
   meshRenderer: {fileID: 90414404}
   meshCollider: {fileID: 90414405}
-  colliderManager: {fileID: 423346043}
   pathFinder: {fileID: 436089945}
+  colliderManager: {fileID: 423346043}
 --- !u!4 &125710537
 Transform:
   m_ObjectHideFlags: 0

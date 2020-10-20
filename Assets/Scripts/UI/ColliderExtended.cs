@@ -12,8 +12,12 @@ public class ColliderExtended : MonoBehaviour {
     bool mouseOver;
     ColliderManager cManager;
 
-    public void SetData(MapGraph.MapNode node, SphereCollider collider, TextMesh text, ColliderManager cManager) {
-        this.node = node; //^used instead of a constructor
+    public void SetData(MapGraph.MapNode node, ColliderManager cManager) {
+        SphereCollider collider = gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
+        collider.radius = 4;
+        gameObject.layer = 5;
+        TextMesh text = gameObject.AddComponent(typeof(TextMesh)) as TextMesh;      
+        this.node = node;
         this.cManager = cManager;
         gameObject.transform.position = node.centerPoint;
         switch (node.nodeType) {
@@ -35,15 +39,13 @@ public class ColliderExtended : MonoBehaviour {
             case MapGraph.MapNodeType.FreshWater:
                 gameObject.transform.position = new Vector3(gameObject.transform.position.x, -7, gameObject.transform.position.z);
                 break;
-        }      
-        collider.radius = 4;
+        }             
         this.text = text; //setting all properties of TextMesh vvv
         this.text.alignment = TextAlignment.Center;
         this.text.anchor = TextAnchor.LowerCenter;
         this.text.fontStyle = FontStyle.Bold;
         this.text.characterSize = 5;
-        mouseOver = false;     
-        
+        mouseOver = false;            
     }
     void Update() {
         if(mouseOver) { //makes the TextMesh face the camera
