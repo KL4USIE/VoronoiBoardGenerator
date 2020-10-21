@@ -24,12 +24,12 @@ public class TerrainGeneratorPreview : MonoBehaviour {
 		if (drawMode == DrawMode.NoiseMap) {
             textureData.ApplyToMaterial(terrainMaterial);
             textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
-            HeightMapGenerator.HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+            HeightMapGenerator.HeightMap heightMap = HeightMapGenerator.GenerateHeightMapFlat(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine);
             DrawTexture (TextureGenerator.TextureFromHeightMap (heightMap));
 		} else if (drawMode == DrawMode.Mesh) {
             textureData.ApplyToMaterial(terrainMaterial);
             textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
-            HeightMapGenerator.HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+            HeightMapGenerator.HeightMap heightMap = HeightMapGenerator.GenerateHeightMapFlat(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine);
             DrawMesh (MeshGenerator.GenerateTerrainMesh (heightMap.values, meshSettings, editorPreviewLOD));
 		} else if (drawMode == DrawMode.FalloffMap) {
 			DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMapGenerator.HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.numVertsPerLine, heightMapSettings.falloffType, heightMapSettings.falloffCurve),0,1)));

@@ -6,10 +6,13 @@ using UnityEngine;
 //Singular instance is attached to ColliderContainer
 //Responsible for Bottom-Left UI
 public class ColliderManager : MonoBehaviour {    
-    List<GameObject> colliderObjects = new List<GameObject>(); //list of all generated GameObjects, to delete them later
+    private List<GameObject> colliderObjects = new List<GameObject>(); //list of all generated GameObjects, to delete them later
     public MapGeneratorPreview mapGenerator; //Reference so that the UI button can trigger generation
-    MapGraph.MapNode activeNode;
+    private MapGraph.MapNode activeNode;
 
+    private void Start() {
+        //ClearColliders();
+    }
     public void SetActiveNode(MapGraph.MapNode node) {
         this.activeNode = node;
     }

@@ -2,62 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-//--Class purpose-- 
-//Generates the heightmap based on the node types
+/// <summary>
+/// Generates the heightmap based on the node types
+/// </summary>
 public static class HeightMapGenerator {
-
-	public static HeightMap GenerateHeightMap(int width, int height, HeightMapSettings settings, Vector2 sampleCentre) {
-		float[,] values = Noise.GenerateNoiseMap (width, height, settings.noiseSettings, sampleCentre);
-
-        float[,] falloff= new float[0,0];
-        if (settings.useFalloff)
-        {
-            var curve = new AnimationCurve(settings.falloffCurve.keys);
-            falloff = FalloffGenerator.GenerateFalloffMap(width, settings.falloffType, curve);
-        }
-
-		AnimationCurve threadSafeHeightCurve = new AnimationCurve (settings.heightCurve.keys);
-
-		float minValue = float.MaxValue;
-		float maxValue = float.MinValue;
-
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-
-                if (settings.useFalloff)
-                {
-                    values[i, j] -= falloff[i, j];
-                }
-
-                values[i, j] *= threadSafeHeightCurve.Evaluate(values[i, j]) * settings.heightMultiplier;
-
-                if (values [i, j] > maxValue) {
-					maxValue = values [i, j];
-				}
-				if (values [i, j] < minValue) {
-					minValue = values [i, j];
-				}
-			}
-		}
-
-		return new HeightMap (values, minValue, maxValue);
-	}
-    //ADDED BY NOTH
+    public static HeightMap GenerateHeightMapFlat(int width, int height) {
+        float[,] values = new float[width + 1, height + 1];
+        HeightMapGenerator.HeightMap hMap = new HeightMap(values, -10, +10);
+        return hMap;
+    }
     public static HeightMap GenerateHeightMapFlat(int width, int height, MapGraph graph) {
         //Debug.Log("ARRAY DIMENSIONS: " + width + " " + height);
         float[,] values = new float[width+1, height+1];
         //Debug.Log("Heightmap resolution: "+width+" x "+height);
-        values = RaiseMountains(graph.mountainNodes, graph, values); //handing over graph.mountainNodes is redundant, leaving for WIP
-        values = RaiseSnow(graph.snowNodes, graph, values);
-        values = LowerWater(graph.waterNodes, graph, values);
+        values = RaiseMountains(graph, values);
+        values = RaiseSnow(graph, values);
+        values = LowerWater(graph, values);
 
         HeightMapGenerator.HeightMap hMap = new HeightMap(values, -10, +10);
         graph.UpdateHeights(hMap);
         return hMap;
     }
-    public static float[,] RaiseMountains(List<MapGraph.MapNode> mountainNodes, MapGraph graph, float[,] values) {
+    private static float[,] RaiseMountains(MapGraph graph, float[,] values) {
         Dictionary<MapGraph.MapPoint, int> cornerDic = new Dictionary<MapGraph.MapPoint, int>();
-        foreach(MapGraph.MapNode node in mountainNodes) {
+        foreach(MapGraph.MapNode node in graph.mountainNodes) {
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 3;//raise node center, works, USE Z           
             foreach(MapGraph.MapPoint corner in node.GetCorners()) {     //go through all corners of all mountain nodes, corners between mountains will appear multiple times.
                 if(cornerDic.ContainsKey(corner)) {                      //...if a corner appears three times, raise it
@@ -72,8 +40,8 @@ public static class HeightMapGenerator {
         }
         return values;
     }
-    public static float[,] RaiseSnow(List<MapGraph.MapNode> snowNodes, MapGraph graph, float[,] values) {
-        foreach(MapGraph.MapNode node in snowNodes) {
+    private static float[,] RaiseSnow(MapGraph graph, float[,] values) {
+        foreach(MapGraph.MapNode node in graph.snowNodes) {
             //Debug.Log("Snow Node coordinates: " + node.centerPoint.x + " x " + node.centerPoint.z);                   
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 8; //raise node center; works; USE Z
 
@@ -88,9 +56,9 @@ public static class HeightMapGenerator {
         }       
         return values;
     }
-    public static float[,] LowerWater(List<MapGraph.MapNode> waterNodes, MapGraph graph, float[,] values) { //Same approach as RaiseMountains()
+    private static float[,] LowerWater(MapGraph graph, float[,] values) { //Same approach as RaiseMountains()
         Dictionary<MapGraph.MapPoint, int> cornerDic = new Dictionary<MapGraph.MapPoint, int>();
-        foreach (MapGraph.MapNode node in waterNodes) {
+        foreach (MapGraph.MapNode node in graph.waterNodes) {
             values[(int)node.centerPoint.x, (int)node.centerPoint.z] = -8; //raise node center, works, USE Z           
             foreach (MapGraph.MapPoint corner in node.GetCorners()) {      //go through all corners of all water nodes, corners between water will appear multiple times.
                                                                            //...if a corner appears three times, lower it                               

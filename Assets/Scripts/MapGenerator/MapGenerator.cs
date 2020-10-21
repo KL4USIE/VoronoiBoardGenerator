@@ -7,6 +7,7 @@ using Delaunay;
 //Generates types for each node.
 
 public static class MapGenerator {
+    
     public static void GenerateMap(MapGraph graph, int landConnectionCycles, int genVersion, int mountainReductionCycles, ColliderManager cManager) {
         switch (genVersion) {
             case 1:
@@ -41,21 +42,21 @@ public static class MapGenerator {
     }
     //ADDED BY NOTH
     private static void GenerateV1(MapGraph graph, int landConnectionCycles) {
-        SetAllUndetermined(graph, null);
+        SetAllUndetermined(graph);
         FindWaterNodesV1(graph, landConnectionCycles);
         FindMountainNodes(graph, 0);
         FindSnowNodesV1(graph);
         FindBeachNodes(graph);
     }
     private static void GenerateV2(MapGraph graph, int mountainReductionCycles) { //reworked Water generation
-        SetAllUndetermined(graph, null);
+        SetAllUndetermined(graph);
         FindWaterNodesV2(graph);
         FindMountainNodes(graph, mountainReductionCycles);
         FindSnowNodesV1(graph);
         FindDesertNodes(graph);
     }
     private static void GenerateV3(MapGraph graph,int mountainReductionCycles, ColliderManager cManager) { //reworked Mountain generation
-        SetAllUndetermined(graph, cManager);
+        SetAllUndetermined(graph);
         FindWaterNodesV2(graph);
         FindMountainNodesV3(graph, mountainReductionCycles);
         FindSnowNodesV2(graph);
@@ -63,21 +64,20 @@ public static class MapGenerator {
         FindVegetationNodes(graph);
         FindSecondaryTypes(graph);
         PlaceColliders(graph, cManager);
-        FindRivers(graph, 5);
+        //FindRivers(graph, 5);
     }
     private static void PlaceColliders(MapGraph graph, ColliderManager cManager) {
+        cManager.ClearColliders();
         foreach (var node in graph.nodesByCenterPosition.Values) {
             if (cManager != null) {
                 cManager.AddCollider(node);
             }
         }
     }
-    private static void SetAllUndetermined(MapGraph graph, ColliderManager cManager) {
-        if(cManager != null) cManager.ClearColliders();
+    private static void SetAllUndetermined(MapGraph graph) {
         foreach(var node in graph.nodesByCenterPosition.Values) {
             node.nodeType = MapGraph.MapNodeType.Undetermined;
-            graph.undetNodes.Add(node);
-             
+            graph.undetNodes.Add(node);            
         }
     }   
     private static void FindWaterNodesV1(MapGraph graph, int landConnectionCycles) { //Places Water completely randomly, then optionally removes some thats sorrounded by land
@@ -86,7 +86,7 @@ public static class MapGenerator {
         foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Set random water nodes
             if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.4) {
                 node.nodeType = MapGraph.MapNodeType.SaltWater;
-                node.cost = 2;
+                node.cost = MapGraph.waterCost;
                 graph.waterNodes.Add(node); //add water
                 graph.undetNodes.Remove(node); //remove undet
             } else {
@@ -99,7 +99,7 @@ public static class MapGenerator {
             if (waterNode.nodeType != MapGraph.MapNodeType.SaltWater) break; //Important as to not revert land connections           
             if(CheckLake(graph, waterNode)) {
                 waterNode.nodeType = MapGraph.MapNodeType.FreshWater;
-                waterNode.cost = 2;
+                waterNode.cost = MapGraph.waterCost;
             }
         }           
     }
@@ -133,7 +133,7 @@ public static class MapGenerator {
         foreach (MapGraph.MapNode node in graph.nodesByCenterPosition.Values) { //Saltwater generation: Set random water node
             if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.020) { //0.02 for land-dominated; 0.025 for water-dominated              
                 node.nodeType = MapGraph.MapNodeType.SaltWater;
-                node.cost = 2;
+                node.cost = MapGraph.waterCost;
                 graph.waterNodes.Add(node); //add water
                 graph.undetNodes.Remove(node); //remove undet
                 //WaterNodeRecursion(graph, node.GetNeighborNodes(), 1.0);
@@ -144,13 +144,13 @@ public static class MapGenerator {
             if (node.nodeType == MapGraph.MapNodeType.Undetermined) {
                 if (CheckLake(graph, node) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.03) { //Randomly place FreshWater origin
                     node.nodeType = MapGraph.MapNodeType.FreshWater;
-                    node.cost = 2;
+                    node.cost = MapGraph.waterCost;
                     graph.waterNodes.Add(node); //add water
                     graph.undetNodes.Remove(node); //remove undet
                     foreach (MapGraph.MapNode neighbourNode in node.GetNeighborNodes()) { //Expand freshwater
                         if (CheckLake(graph, neighbourNode) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.025) { //
                             neighbourNode.nodeType = MapGraph.MapNodeType.FreshWater;
-                            neighbourNode.cost = 2;
+                            neighbourNode.cost = MapGraph.waterCost;
                             graph.waterNodes.Add(neighbourNode); //add water   
                             graph.undetNodes.Remove(neighbourNode); //remove undet
                         }
@@ -164,7 +164,7 @@ public static class MapGenerator {
             foreach (MapGraph.MapNode node in nodeList) {
                 if (node.nodeType != MapGraph.MapNodeType.SaltWater && UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
                     node.nodeType = MapGraph.MapNodeType.SaltWater;
-                    node.cost = 2;
+                    node.cost = MapGraph.waterCost;
                     graph.waterNodes.Add(node); //add water
                     graph.undetNodes.Remove(node); //remove undet
                     WaterNodeRecursion(graph, node.GetNeighborNodes(), (propability - 0.3));
@@ -185,7 +185,7 @@ public static class MapGenerator {
                 }
                 if (undetNeighbourCount >= 6 && UnityEngine.Random.Range(0.0f, 1.0f) < 0.8) { //Randomness
                     node.nodeType = MapGraph.MapNodeType.Mountain;
-                    node.cost = 3;
+                    node.cost = MapGraph.mountainCost;
                     graph.mountainNodes.Add(node);
                     graph.undetNodes.Remove(node);
                 }/*
@@ -218,7 +218,7 @@ public static class MapGenerator {
         foreach (var node in new List<MapGraph.MapNode>(graph.undetNodes)) {
             if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.025 && (node.centerPoint.x < graph.GetCenter().x * 1.95 && node.centerPoint.z < graph.GetCenter().y * 1.95)) { //0.02 for land-dominated; 0.025 for water-dominated              
                 node.nodeType = MapGraph.MapNodeType.Mountain;
-                node.cost = 3;
+                node.cost = MapGraph.mountainCost;
                 graph.mountainNodes.Add(node); //add mountain
                 graph.undetNodes.Remove(node); //remove undet
                 //AnyNodeRecursion(graph, node.GetNeighborNodes(), 1.0, MapGraph.MapNodeType.Mountain, graph.mountainNodes, 0.4); //begin recursion    
@@ -232,7 +232,7 @@ public static class MapGenerator {
                 //if (node.nodeType != MapGraph.MapNodeType.Mountain && UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
                 if (node.nodeType == MapGraph.MapNodeType.Undetermined && UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
                     node.nodeType = MapGraph.MapNodeType.Mountain;
-                    node.cost = 3;
+                    node.cost = MapGraph.mountainCost;
                     graph.mountainNodes.Add(node); //add water
                     graph.undetNodes.Remove(node); //remove undet
                     MountainNodeRecursion(graph, node.GetNeighborNodes(), (propability - 0.45));
@@ -252,7 +252,7 @@ public static class MapGenerator {
             }
             if (undetNeighbourCount >= 6 && UnityEngine.Random.Range(0.0f, 1.0f) < 0.8) { //Randomness
                 node.nodeType = MapGraph.MapNodeType.Mountain;
-                node.cost = 3;
+                node.cost = MapGraph.mountainCost;
                 graph.mountainNodes.Add(node);
                 graph.undetNodes.Remove(node);
             }/*
@@ -275,7 +275,7 @@ public static class MapGenerator {
                 }
                 if (mountainNeighbourCount >= 4) {
                     undetNode.nodeType = MapGraph.MapNodeType.Mountain;
-                    undetNode.cost = 3;
+                    undetNode.cost = MapGraph.mountainCost;
                     graph.mountainNodes.Add(undetNode); //cant remove while list is being looped, Update: Copyconstructor to the rescue!    
                     graph.undetNodes.Remove(undetNode);
                 }
@@ -288,7 +288,7 @@ public static class MapGenerator {
             if(node.nodeType != MapGraph.MapNodeType.FreshWater || node.nodeType != MapGraph.MapNodeType.SaltWater) {               
                 if (CheckSnowV1(graph, node)) {
                     node.nodeType = MapGraph.MapNodeType.Snow;
-                    node.cost = 4;
+                    node.cost = MapGraph.snowCost;
                     graph.snowNodes.Add(node);
                     graph.undetNodes.Remove(node);
                 }                 
@@ -300,7 +300,7 @@ public static class MapGenerator {
                 if (neighbourNode.nodeType != MapGraph.MapNodeType.FreshWater || neighbourNode.nodeType != MapGraph.MapNodeType.SaltWater) {
                     if (CheckSnowV1(graph, neighbourNode)) {
                         neighbourNode.nodeType = MapGraph.MapNodeType.Snow;
-                        neighbourNode.cost = 4;
+                        neighbourNode.cost = MapGraph.snowCost;
                         graph.snowNodes.Add(neighbourNode);
                         graph.undetNodes.Remove(neighbourNode);
                     }
@@ -322,7 +322,7 @@ public static class MapGenerator {
             if (node.nodeType != MapGraph.MapNodeType.FreshWater || node.nodeType != MapGraph.MapNodeType.SaltWater) {
                 if (CheckSnowV2(graph, node)) {
                     node.nodeType = MapGraph.MapNodeType.Snow;
-                    node.cost = 4;
+                    node.cost = MapGraph.snowCost;
                     graph.snowNodes.Add(node);
                     graph.mountainNodes.Remove(node);
                 }
@@ -334,7 +334,7 @@ public static class MapGenerator {
                 if (neighbourNode.nodeType != MapGraph.MapNodeType.FreshWater || neighbourNode.nodeType != MapGraph.MapNodeType.SaltWater) {
                     if (CheckSnowV2(graph, neighbourNode)) {
                         neighbourNode.nodeType = MapGraph.MapNodeType.Snow;
-                        neighbourNode.cost = 4;
+                        neighbourNode.cost = MapGraph.snowCost;
                         graph.snowNodes.Add(neighbourNode);
                         graph.undetNodes.Remove(neighbourNode);
                     }
@@ -344,7 +344,7 @@ public static class MapGenerator {
         foreach(var snowNode in graph.snowNodes) {
             if (snowNode.centerPoint.z <= (graph.GetCenter().z * 0.6)) {
                 snowNode.nodeType = MapGraph.MapNodeType.Highland;
-                snowNode.cost = 3;
+                snowNode.cost = MapGraph.highlandCost;
             }
         }
     }   
@@ -372,7 +372,7 @@ public static class MapGenerator {
             }
             if (waterNeighbours >= 4) {
                 node.nodeType = MapGraph.MapNodeType.Sand;
-                node.cost = 1;
+                node.cost = MapGraph.sandCost;
                 graph.undetNodes.Remove(node);
             }
         }
@@ -381,7 +381,7 @@ public static class MapGenerator {
         foreach (var node in new List<MapGraph.MapNode>(graph.undetNodes)) {
             if(node.centerPoint.z <= (graph.GetCenter().z * 0.6) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.06) { //if below horizontal center, meaning Deserts will only generate in the south; propability for desert spawn
                 node.nodeType = MapGraph.MapNodeType.Sand;
-                node.cost = 1;
+                node.cost = MapGraph.sandCost;
                 graph.sandNodes.Add(node); //add sand
                 graph.undetNodes.Remove(node); //remove undet
                 SandNodeRecursion(graph, node.GetNeighborNodes(), 1.0); //begin recursion
@@ -393,7 +393,7 @@ public static class MapGenerator {
             foreach (MapGraph.MapNode node in nodeList) {
                 if (node.nodeType == MapGraph.MapNodeType.Undetermined && UnityEngine.Random.Range(0.0f, 1.0f) < propability) {
                     node.nodeType = MapGraph.MapNodeType.Sand;
-                    node.cost = 1;
+                    node.cost = MapGraph.sandCost;
                     graph.sandNodes.Add(node); //add water
                     graph.undetNodes.Remove(node); //remove undet
                     SandNodeRecursion(graph, node.GetNeighborNodes(), (propability - 0.3));                   
@@ -405,14 +405,14 @@ public static class MapGenerator {
     private static void FindVegetationNodes(MapGraph graph) {
         foreach (var node in new List<MapGraph.MapNode>(graph.undetNodes)) {
             if(UnityEngine.Random.Range(0.0f, 1.0f) <= 0.5) { //decide between forest and grass
-                node.cost = 1;
+                node.cost = MapGraph.grassCost;
                 if (node.centerPoint.z <= (graph.GetCenter().z * 0.6)) { //southern grass becomes steppe
                     node.nodeType = MapGraph.MapNodeType.Steppe;
                 } else {
                     node.nodeType = MapGraph.MapNodeType.Grass;
                 }              
             } else { //is forest
-                node.cost = 2;
+                node.cost = MapGraph.forestCost;
                 if(node.centerPoint.z >= (graph.GetCenter().z * 1.4)) { //northern forest becomes pine forest
                     node.nodeType = MapGraph.MapNodeType.PineForest;
                 } else {
@@ -445,19 +445,19 @@ public static class MapGenerator {
             int sandNeighbours = 0;          
             foreach(var neighbourNode in node.GetNeighborNodes()) {
                 if(neighbourNode.nodeType != MapGraph.MapNodeType.SaltWater && neighbourNode.nodeType != MapGraph.MapNodeType.FreshWater) {
-                    int landNeighbours = 0;
-                    foreach(var doubleNeighbour in neighbourNode.GetNeighborNodes()) { //for Island and Peninsula
-                        if(doubleNeighbour.nodeType != MapGraph.MapNodeType.SaltWater) landNeighbours++;                       
-                    }                  
+                    if(node.secondType != MapGraph.SecondType.CoastalWaters) {
+                        node.secondType = MapGraph.SecondType.CoastalWaters;
+                        node.cost += 2;
+                    }
                     if(neighbourNode.nodeType == MapGraph.MapNodeType.Mountain && neighbourNode.secondType != MapGraph.SecondType.CoastalCliff) { //set CoastalCliff
                         neighbourNode.secondType = MapGraph.SecondType.CoastalCliff;
                         neighbourNode.cost += 1;
                     } else if(neighbourNode.secondType != MapGraph.SecondType.Coast) { //set Coast
                         neighbourNode.secondType = MapGraph.SecondType.Coast;
-                        neighbourNode.cost += 1;
+                        //neighbourNode.cost += 1;
                     }                    
                 }
-                if(neighbourNode.nodeType == MapGraph.MapNodeType.Sand) sandNeighbours++;//oasis                              
+                if(neighbourNode.nodeType == MapGraph.MapNodeType.Sand) sandNeighbours++;//for Oasis                              
             }
             if(sandNeighbours >= 4) { //set Oasis
                 node.secondType = MapGraph.SecondType.Oasis;
@@ -465,38 +465,12 @@ public static class MapGenerator {
         }
     }
     //NOT ADDED BY NOTH
-    private static void SetEdgesToWater(MapGraph graph) {
-        foreach (var node in graph.nodesByCenterPosition.Values) {
-            if (node.IsEdge()) node.nodeType = MapGraph.MapNodeType.FreshWater;
-        }
-    }
-
+    /*   
     private static void AverageCenterPoints(MapGraph graph) {
         foreach (var node in graph.nodesByCenterPosition.Values) {
             node.centerPoint = new Vector3(node.centerPoint.x, node.GetCorners().Average(x => x.position.y), node.centerPoint.z);
         }
-    }
-
-    private static void AddMountains(MapGraph graph) {
-        foreach (var node in graph.nodesByCenterPosition.Values) {
-            if (node.GetElevation() > 15f || node.GetHeightDifference() > 7f) {
-                node.nodeType = MapGraph.MapNodeType.Mountain;
-            }
-            if (node.GetElevation() > 17f) {
-                node.nodeType = MapGraph.MapNodeType.Snow;
-            }
-        }
-    }
-
-    private static void CreateLakes(MapGraph graph) {
-        foreach (var node in graph.nodesByCenterPosition.Values) {
-            var edges = node.GetEdges();
-            if (!edges.Any(x => x.water == 0)) {
-                CreateLake(node);
-            }
-        }
-    }
-
+    }        
     private static void FindRivers(MapGraph graph, float minElevation) {
         var riverCount = 0;
         foreach (var node in graph.nodesByCenterPosition.Values) {
@@ -511,7 +485,6 @@ public static class MapGenerator {
         }
         //Debug.Log(string.Format("{0} rivers drawn", riverCount));
     }
-
     private static void CreateRiver(MapGraph graph, MapGraph.MapNodeHalfEdge startEdge) {
         bool heightUpdated = false;
         // Once a river has been generated, it tries again to see if a quicker route has been created.
@@ -587,141 +560,6 @@ public static class MapGenerator {
                 previousRiverEdges = riverEdges;
             }
         } while (heightUpdated);
-    }
-
-    private static void CreateLake(MapGraph.MapNode node) {
-        var lowestCorner = node.GetLowestCorner();
-        node.nodeType = MapGraph.MapNodeType.FreshWater;
-
-        // Set all of the heights equal to where the water came in.
-        SetNodeHeightToCornerHeight(node, lowestCorner);
-    }
-
-    private static void LevelEdge(MapGraph.MapNodeHalfEdge currentEdge) {
-        currentEdge.destination.position = new Vector3(currentEdge.destination.position.x, currentEdge.previous.destination.position.y, currentEdge.destination.position.z);
-    }
-
-    private static MapGraph.MapNodeHalfEdge GetDownSlopeEdge(MapGraph.MapNodeHalfEdge source, List<MapGraph.MapNodeHalfEdge> seenEdges) {
-        var corner = source.destination;
-
-        var candidates = corner.GetEdges().Where(x =>
-            x.destination.position.y < corner.position.y &&
-            !seenEdges.Contains(x) &&
-            x.opposite != null && !seenEdges.Contains(x.opposite) &&
-            x.node.nodeType != MapGraph.MapNodeType.FreshWater &&
-            x.opposite.node.nodeType != MapGraph.MapNodeType.FreshWater);
-
-        // Make sure the river prefers to follow existing rivers
-        var existingRiverEdge = candidates.FirstOrDefault(x => x.water > 0);
-        if (existingRiverEdge != null) return existingRiverEdge;
-
-        return candidates.OrderByDescending(x => x.GetSlopeAngle()).FirstOrDefault();
-    }
-
-    private static MapGraph.MapNodeHalfEdge GetNewCandidateEdge(Vector3 center, MapGraph.MapNodeHalfEdge source, List<MapGraph.MapNodeHalfEdge> seenEdges, List<MapGraph.MapNodeHalfEdge> previousEdges) {
-        var corner = source.destination;
-
-        var edges = corner.GetEdges().Where(x =>
-            !seenEdges.Contains(x) &&
-            x.opposite != null &&
-            !seenEdges.Contains(x.opposite)).ToList();
-
-        // Make sure the river prefers to follow existing rivers
-        var existingRiverEdge = edges.FirstOrDefault(x => x.water > 0);
-        if (existingRiverEdge != null) return existingRiverEdge;
-
-        // Make the river prefer to follow previous iterations
-        existingRiverEdge = edges.FirstOrDefault(x => previousEdges.Contains(x));
-        if (existingRiverEdge != null) return existingRiverEdge;
-
-        var awayFromCenterEdges = edges.Where(x => Vector3.Dot(x.destination.position - x.previous.destination.position, x.destination.position - center) >= 0);
-        if (awayFromCenterEdges.Any()) edges = awayFromCenterEdges.ToList();
-        return edges.OrderBy(x => x.destination.position.y).FirstOrDefault();
-    }
-
-
-    private static void SetNodeHeightToCornerHeight(MapGraph.MapNode node, MapGraph.MapPoint targetCorner) {
-        foreach (var corner in node.GetCorners()) {
-            corner.position = new Vector3(corner.position.x, targetCorner.position.y, corner.position.z);
-        }
-        node.centerPoint = new Vector3(node.centerPoint.x, targetCorner.position.y, node.centerPoint.z);
-    }
-
-    private static void FillOcean(MapGraph graph) {
-        var startNode = graph.nodesByCenterPosition.FirstOrDefault(x => x.Value.IsEdge() && x.Value.nodeType == MapGraph.MapNodeType.FreshWater).Value;
-        FloodFill(startNode, MapGraph.MapNodeType.FreshWater, MapGraph.MapNodeType.SaltWater);
-    }
-
-    private static void FloodFill(MapGraph.MapNode node, MapGraph.MapNodeType targetType, MapGraph.MapNodeType replacementType) {
-        if (targetType == replacementType) return;
-        if (node.nodeType != targetType) return;
-        node.nodeType = replacementType;
-        foreach (var neighbor in node.GetNeighborNodes()) {
-            FloodFill(neighbor, targetType, replacementType);
-        }
-    }
-
-    private static void SetBeaches(MapGraph graph) {
-        foreach (var node in graph.nodesByCenterPosition.Values) {
-            if (node.nodeType == MapGraph.MapNodeType.Grass) {
-                foreach (var neighbor in node.GetNeighborNodes()) {
-                    if (neighbor.nodeType == MapGraph.MapNodeType.SaltWater) {
-                        if (node.GetHeightDifference() < 0.8f) {
-                            node.nodeType = MapGraph.MapNodeType.Sand;
-                            node.cost = 1;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private static void FindCities(MapGraph graph, float minElevation, float maxElevation, int maxCities) {
-        var preferredElevation = 6f;
-        var heightDifferenceWeighting = 4f;
-
-        int cityCount = 0;
-        while (cityCount < maxCities) {
-            var candidate = GetCityCandidate(graph, preferredElevation, heightDifferenceWeighting).FirstOrDefault();
-            if (candidate == null) break;
-            candidate.nodeType = MapGraph.MapNodeType.City;
-            cityCount++;
-        }
-    }
-
-    private static IOrderedEnumerable<MapGraph.MapNode> GetCityCandidate(MapGraph graph, float preferredElevation, float heightDifferenceWeighting) {
-        var candidates = graph.nodesByCenterPosition.Values.Where((node) => {
-            return node.nodeType == MapGraph.MapNodeType.Grass &&
-            node.GetEdges().Any(x => x.water > 0) && // Has a river
-            !node.GetNeighborNodes().Any(x => x.nodeType == MapGraph.MapNodeType.City); // Not next to another city
-        }).OrderBy((node) => {
-            var heightDifference = node.GetHeightDifference();
-            var elevation = node.GetElevation();
-            return Mathf.Abs(elevation - preferredElevation) + heightDifference * heightDifferenceWeighting;
-        });
-        return candidates;
-    }
-
-    private static void SetNodesToGrass(MapGraph graph) {
-        foreach (var node in graph.nodesByCenterPosition.Values)
-        {
-            if (node.nodeType != MapGraph.MapNodeType.Error) node.nodeType = MapGraph.MapNodeType.Grass;
-        }
-    }
-
-    private static void SetLowNodesToWater(MapGraph graph, float cutoff) {
-        foreach (var node in graph.nodesByCenterPosition.Values) {
-            if (node.centerPoint.y <= cutoff) {
-                var allZero = true;
-                foreach (var edge in node.GetEdges()) {
-                    if (edge.destination.position.y > cutoff) {
-                        allZero = false;
-                        break;
-                    }
-                }
-                if (allZero && node.nodeType != MapGraph.MapNodeType.Error) node.nodeType = MapGraph.MapNodeType.FreshWater;
-            }
-        }
-    }
+    }     
+   */
 }

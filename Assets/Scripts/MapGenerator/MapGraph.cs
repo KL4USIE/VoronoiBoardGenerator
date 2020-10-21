@@ -8,6 +8,13 @@ using Delaunay.Geo;
 
 public partial class MapGraph
 {
+    public static int waterCost = 2;
+    public static int grassCost = 1;
+    public static int forestCost = 2;
+    public static int sandCost = 1;
+    public static int mountainCost = 3;
+    public static int snowCost = 4;
+    public static int highlandCost = 3;
     public List<MapGraph.MapNode> undetNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> waterNodes = new List<MapGraph.MapNode>();
     public List<MapGraph.MapNode> mountainNodes = new List<MapGraph.MapNode>();
@@ -35,7 +42,8 @@ public partial class MapGraph
         nothing, //default type
         Oasis, //for freshwater in deserts
         Coast, //for all tiles sorrounding SaltWater
-        CoastalCliff //For Mountains adjacent to SaltWater
+        CoastalCliff, //For Mountains adjacent to SaltWater
+        CoastalWaters
     }
 
 

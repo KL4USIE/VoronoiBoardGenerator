@@ -17,14 +17,14 @@ using System.Linq;
 /// <param name="markerObjects">List of the spawned objects, for later deletion</param>
 /// <param name="ignoreCost">toggle for whether cost should be ignored during pathfinding</param>
 public class PathFinder : MonoBehaviour {
-    MapGraph graph; 
-    MapGraph.MapNode fromNode = null; //saves start-node
-    MapGraph.MapNode toNode = null; //saves target-node    
+    private MapGraph graph; 
+    private MapGraph.MapNode fromNode = null; //saves start-node
+    private MapGraph.MapNode toNode = null; //saves target-node    
     public ColliderManager cManager; //for getting highlighted nodes
-    List<GameObject> markerObjects = new List<GameObject>(); //list of the spawned objects, for later deletion
-    bool ignoreCost = false;
-    bool showCostRules = false;
-    GUIStyle guiStyle = new GUIStyle(); //for OnGUI()
+    private List<GameObject> markerObjects = new List<GameObject>(); //list of the spawned objects, for later deletion
+    private bool ignoreCost = false;
+    private bool showCostRules = false;
+    private GUIStyle guiStyle = new GUIStyle(); //for OnGUI()
 
     public void Start() {
         guiStyle.fontSize = 25;
@@ -206,7 +206,8 @@ public class PathFinder : MonoBehaviour {
                                                    "2-Cost Types: Forest, PineForest, SaltWater, FreshWater \n" +
                                                    "3-Cost Types: Mountain, Highland \n" +
                                                    "4-Cost Types: Snow \n" +
-                                                   "Secondary type Coast adds +1 cost.", 
+                                                   "Secondary type CoastalCliff adds +1 cost. \n" +
+                                                   "Secondary type CoastalWaters adds +2 cost.",
                                                    guiStyle);
 
         }

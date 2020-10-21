@@ -9,8 +9,8 @@ using UnityEngine;
 public class ColliderExtended : MonoBehaviour {
     public MapGraph.MapNode node; //refers to the node that the collider represents
     public TextMesh text; //TextMesh Object for showing the node's properties
-    bool mouseOver;
-    ColliderManager cManager;
+    private bool mouseOver;
+    private ColliderManager cManager;
 
     public void SetData(MapGraph.MapNode node, ColliderManager cManager) {
         SphereCollider collider = gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
