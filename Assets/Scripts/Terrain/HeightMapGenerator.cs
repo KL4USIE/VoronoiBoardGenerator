@@ -59,7 +59,7 @@ public static class HeightMapGenerator {
     private static float[,] LowerWater(MapGraph graph, float[,] values) { //Same approach as RaiseMountains()
         Dictionary<MapGraph.MapPoint, int> cornerDic = new Dictionary<MapGraph.MapPoint, int>();
         foreach (MapGraph.MapNode node in graph.waterNodes) {
-            values[(int)node.centerPoint.x, (int)node.centerPoint.z] = -8; //raise node center, works, USE Z           
+            values[(int)node.centerPoint.x, (int)node.centerPoint.z] = -6; //raise node center, works, USE Z           
             foreach (MapGraph.MapPoint corner in node.GetCorners()) {      //go through all corners of all water nodes, corners between water will appear multiple times.
                                                                            //...if a corner appears three times, lower it                               
                 List<MapGraph.MapNode> nodeList = new List<MapGraph.MapNode>(corner.GetNodes()); //fixed a bug where corners that...
@@ -75,7 +75,7 @@ public static class HeightMapGenerator {
                     Vector2Int coords = new Vector2Int((int)corner.position.x, (int)corner.position.z);
                     //Debug.Log(values.Length);
                     //Debug.Log((int)corner.position.x +" "+ (int)corner.position.z);                  
-                    values[coords.x, coords.y] = -8;                                       
+                    values[coords.x, coords.y] = -6;                                       
                 }
             }                            
         }

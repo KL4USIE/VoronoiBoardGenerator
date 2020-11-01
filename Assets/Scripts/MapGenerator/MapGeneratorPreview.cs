@@ -48,6 +48,11 @@ public partial class MapGeneratorPreview : MonoBehaviour
     public PathFinder pathFinder;
     public ColliderManager colliderManager;
 
+    private MapGraph mapGraph;
+    public MapGraph GetMapGraph() {
+        return this.mapGraph;
+    }
+
     public void Start() {
         StartCoroutine(GenerateMapAsync());
     }
@@ -64,7 +69,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
         var voronoi = new Delaunay.Voronoi(points, null, new Rect(0, 0, meshSize, meshSize), relaxationIterations);
         Debug.Log(string.Format("Voronoi Generated: {0:n0}ms", DateTime.Now.Subtract(time).TotalMilliseconds));             
         //time = DateTime.Now;
-        var mapGraph = new MapGraph(voronoi, snapDistance);
+        mapGraph = new MapGraph(voronoi, snapDistance);
         //Debug.Log(string.Format("MapGraph Generated: {0:n0}ms with {1} nodes", DateTime.Now.Subtract(startTime).TotalMilliseconds, mapGraph.nodesByCenterPosition.Count));
         time = DateTime.Now;
         MapGenerator.GenerateMap(mapGraph, v1_LandConnectionCycles, propertyGenVersion, mountainReductionCycles, colliderManager);
@@ -138,7 +143,7 @@ public partial class MapGeneratorPreview : MonoBehaviour
         UpdateTexture(texture);
     }
 
-    private void UpdateTexture(Texture2D texture) {
+    public void UpdateTexture(Texture2D texture) {
         meshRenderer.sharedMaterial.mainTexture = texture;
     }
 

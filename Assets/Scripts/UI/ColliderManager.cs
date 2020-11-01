@@ -9,7 +9,6 @@ public class ColliderManager : MonoBehaviour {
     private List<GameObject> colliderObjects = new List<GameObject>(); //list of all generated GameObjects, to delete them later
     public MapGeneratorPreview mapGenerator; //Reference so that the UI button can trigger generation
     private MapGraph.MapNode activeNode;
-    UnityEngine.UI.Toggle m_Toggle;
 
     private void Start() {
         //ClearColliders();
@@ -55,7 +54,15 @@ public class ColliderManager : MonoBehaviour {
             mapGenerator.pointGeneration = MapGeneratorPreview.PointGeneration.Grid;
             mapGenerator.Start();
         }
-        mapGenerator.drawNodeCenters = GUI.Toggle(new Rect(10, 50, 140, 20), mapGenerator.drawNodeCenters, "Show Centerpoints");  //Button that triggers grid seed generation                
-        mapGenerator.drawNodeBoundaries = GUI.Toggle(new Rect(10, 70, 140, 20), mapGenerator.drawNodeBoundaries, "Show Boundaries"); //Button that triggers grid seed generation               
+        if(GUI.Button(new Rect(10, 50, 170, 20), "Toggle Centerpoints")) {  //Button that triggers grid seed generation   
+            mapGenerator.drawNodeCenters = !mapGenerator.drawNodeCenters;
+            var texture = MapTextureGenerator.GenerateTexture(mapGenerator.GetMapGraph(), mapGenerator.meshSize, mapGenerator.textureSize, mapGenerator.colours, mapGenerator.drawNodeBoundaries, mapGenerator.drawDelauneyTriangles, mapGenerator.drawNodeCenters);
+            mapGenerator.UpdateTexture(texture);
+        }
+        if(GUI.Button(new Rect(190, 50, 170, 20), "Toggle Boundaries")) { //Button that triggers grid seed generation    
+            mapGenerator.drawNodeBoundaries = !mapGenerator.drawNodeBoundaries;
+            var texture = MapTextureGenerator.GenerateTexture(mapGenerator.GetMapGraph(), mapGenerator.meshSize, mapGenerator.textureSize, mapGenerator.colours, mapGenerator.drawNodeBoundaries, mapGenerator.drawDelauneyTriangles, mapGenerator.drawNodeCenters);
+            mapGenerator.UpdateTexture(texture);
+        }
     }
 }

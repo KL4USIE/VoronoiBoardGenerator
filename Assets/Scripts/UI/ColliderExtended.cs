@@ -34,10 +34,10 @@ public class ColliderExtended : MonoBehaviour {
                 gameObject.transform.position = new Vector3(gameObject.transform.position.x, 5, gameObject.transform.position.z);
                 break;
             case MapGraph.MapNodeType.SaltWater:
-                gameObject.transform.position = new Vector3(gameObject.transform.position.x, -7, gameObject.transform.position.z);
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, -3, gameObject.transform.position.z);
                 break;
             case MapGraph.MapNodeType.FreshWater:
-                gameObject.transform.position = new Vector3(gameObject.transform.position.x, -7, gameObject.transform.position.z);
+                gameObject.transform.position = new Vector3(gameObject.transform.position.x, -3, gameObject.transform.position.z);
                 break;
         }             
         this.text = text; //setting all properties of TextMesh vvv
