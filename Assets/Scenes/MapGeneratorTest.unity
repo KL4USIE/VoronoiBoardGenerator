@@ -284,7 +284,7 @@ MonoBehaviour:
   propertyGenVersion: 3
   meshSize: 600
   textureSize: 4096
-  drawNodeBoundaries: 0
+  drawNodeBoundaries: 1
   drawDelauneyTriangles: 0
   drawNodeCenters: 1
   colours:
@@ -310,7 +310,7 @@ MonoBehaviour:
     color: {r: 0.19111006, g: 0.4056604, b: 0.14159843, a: 1}
   - type: 11
     color: {r: 0.6415094, g: 0.5376899, b: 0.32680666, a: 1}
-  pointGeneration: 1
+  pointGeneration: 0
   pointSpacing: 10
   relaxationIterations: 0
   snapDistance: 1
@@ -628,6 +628,7 @@ GameObject:
   - component: {fileID: 1538689923}
   - component: {fileID: 1538689922}
   - component: {fileID: 1538689926}
+  - component: {fileID: 1538689927}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -738,6 +739,19 @@ MonoBehaviour:
   RotationSmoothingValue: 5
   MoveSensitivity: 5
   allowRotation: 1
+--- !u!114 &1538689927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538689921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925d17927f3046148a3747f8249b53c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!1 &1858342692
 GameObject:
   m_ObjectHideFlags: 0

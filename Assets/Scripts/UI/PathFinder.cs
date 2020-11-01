@@ -188,21 +188,21 @@ public class PathFinder : MonoBehaviour {
     /// </summary>
     private void OnGUI() {
         if(ignoreCost) {
-            GUI.Label(new Rect(10, 45, 200, 120), "Q - Set start node \n" +
+            GUI.Label(new Rect(10, 90, 200, 120), "Q - Set start node \n" +
                                                   "E - Set target node \n" +
                                                   "R - Reset markers \n" +
                                                   "F - Toggle Cost Rules \n" + 
                                                   "T - Toggle Cost-ignorance \n" +
                                                   "Cost is being ignored");
         } else {
-            GUI.Label(new Rect(10, 45, 200, 120), "Q - Set start node \n" +
+            GUI.Label(new Rect(10, 90, 200, 120), "Q - Set start node \n" +
                                                  "E - Set target node \n" +
                                                  "R - Reset markers \n" +
                                                  "F - Toggle Cost Rules \n" +
                                                  "T - Toggle Cost-ignorance");
         }      
         if(showCostRules) {
-            GUI.Label(new Rect(210, 10, 400, 120), "1-Cost Types: Grass, Steppe, Sand \n" +
+            GUI.Label(new Rect(210, 50, 400, 120), "1-Cost Types: Grass, Steppe, Sand \n" +
                                                    "2-Cost Types: Forest, PineForest, SaltWater, FreshWater \n" +
                                                    "3-Cost Types: Mountain, Highland \n" +
                                                    "4-Cost Types: Snow \n" +

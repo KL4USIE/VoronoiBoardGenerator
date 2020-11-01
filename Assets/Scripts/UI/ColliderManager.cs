@@ -9,6 +9,7 @@ public class ColliderManager : MonoBehaviour {
     private List<GameObject> colliderObjects = new List<GameObject>(); //list of all generated GameObjects, to delete them later
     public MapGeneratorPreview mapGenerator; //Reference so that the UI button can trigger generation
     private MapGraph.MapNode activeNode;
+    UnityEngine.UI.Toggle m_Toggle;
 
     private void Start() {
         //ClearColliders();
@@ -34,9 +35,27 @@ public class ColliderManager : MonoBehaviour {
     }
     private void OnGUI() {
         GUI.skin.label.fontSize = 16;
-        if (GUI.Button(new Rect(10, 10, 160, 30), "Generate Random Seed")) { //Button that trigger random seed generation
+        if (GUI.Button(new Rect(10, 10, 80, 30), "Random")) { //Button that triggers random seed generation
             mapGenerator.seed = (int)Random.Range(0, 100);
+            mapGenerator.pointGeneration = MapGeneratorPreview.PointGeneration.Random;
             mapGenerator.Start();
         }
+        if (GUI.Button(new Rect(100, 10, 80, 30), "Poisson")) { //Button that triggers poisson disc seed generation
+            mapGenerator.seed = (int)Random.Range(0, 100);
+            mapGenerator.pointGeneration = MapGeneratorPreview.PointGeneration.PoissonDisc;
+            mapGenerator.Start();
+        }
+        if (GUI.Button(new Rect(190, 10, 80, 30), "Hexagon")) { //Button that triggers hexagon seed generation
+            mapGenerator.seed = (int)Random.Range(0, 100);
+            mapGenerator.pointGeneration = MapGeneratorPreview.PointGeneration.OffsetGrid;
+            mapGenerator.Start();
+        }
+        if (GUI.Button(new Rect(280, 10, 80, 30), "Grid")) { //Button that triggers grid seed generation
+            mapGenerator.seed = (int)Random.Range(0, 100);
+            mapGenerator.pointGeneration = MapGeneratorPreview.PointGeneration.Grid;
+            mapGenerator.Start();
+        }
+        mapGenerator.drawNodeCenters = GUI.Toggle(new Rect(10, 50, 140, 20), mapGenerator.drawNodeCenters, "Show Centerpoints");  //Button that triggers grid seed generation                
+        mapGenerator.drawNodeBoundaries = GUI.Toggle(new Rect(10, 70, 140, 20), mapGenerator.drawNodeBoundaries, "Show Boundaries"); //Button that triggers grid seed generation               
     }
 }
