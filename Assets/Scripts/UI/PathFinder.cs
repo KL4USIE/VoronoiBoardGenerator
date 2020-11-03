@@ -30,6 +30,7 @@ public class PathFinder : MonoBehaviour {
     private GUIStyle guiStyleSmall = new GUIStyle(); //for OnGUI()
     private int pathFinderBudget = 0;
     public Material redMat;
+    private List<MapGraph.MapNode> shortestPath = new List<MapGraph.MapNode>();
 
     public void Start() {
         guiStyleLarge.fontSize = 30;
@@ -83,38 +84,44 @@ public class PathFinder : MonoBehaviour {
             if(pathFinderBudget > 0) {
                 pathFinderBudget--;
                 if (fromNode != null && toNode != null) {
-                    List<MapGraph.MapNode> path = GetShortestPath();
+                    List<MapGraph.MapNode> budgetPath = BudgetPath(shortestPath, pathFinderBudget); //budgeting
+                    SpawnMarkers(budgetPath);
                 }
             }         
         }
         if (Input.GetKeyDown(KeyCode.Alpha2)) { //Add 1 to budget
             pathFinderBudget++;
             if (fromNode != null && toNode != null) {
-                List<MapGraph.MapNode> path = GetShortestPath();
+                List<MapGraph.MapNode> budgetPath = BudgetPath(shortestPath, pathFinderBudget); //budgeting
+                SpawnMarkers(budgetPath);
             }
         }
         if (Input.GetKeyDown(KeyCode.Alpha3)) { //Set budget to 10
             pathFinderBudget = 10;
             if (fromNode != null && toNode != null) {
-                List<MapGraph.MapNode> path = GetShortestPath();
+                List<MapGraph.MapNode> budgetPath = BudgetPath(shortestPath, pathFinderBudget); //budgeting
+                SpawnMarkers(budgetPath);
             }
         }
         if (Input.GetKeyDown(KeyCode.Alpha4)) { //Set budget to 25
             pathFinderBudget = 25;
             if (fromNode != null && toNode != null) {
-                List<MapGraph.MapNode> path = GetShortestPath();
+                List<MapGraph.MapNode> budgetPath = BudgetPath(shortestPath, pathFinderBudget); //budgeting
+                SpawnMarkers(budgetPath);
             }
         }
         if (Input.GetKeyDown(KeyCode.Alpha5)) { //Set budget to 50
             pathFinderBudget = 50;
             if (fromNode != null && toNode != null) {
-                List<MapGraph.MapNode> path = GetShortestPath();
+                List<MapGraph.MapNode> budgetPath = BudgetPath(shortestPath, pathFinderBudget); //budgeting
+                SpawnMarkers(budgetPath);
             }
         }
         if (Input.GetKeyDown(KeyCode.Alpha0)) { //Set budget to 0(ignoring budget)
             pathFinderBudget = 0;
             if (fromNode != null && toNode != null) {
-                List<MapGraph.MapNode> path = GetShortestPath();
+                List<MapGraph.MapNode> budgetPath = BudgetPath(shortestPath, pathFinderBudget); //budgeting
+                SpawnMarkers(budgetPath);
             }
         }
     }
@@ -173,9 +180,8 @@ public class PathFinder : MonoBehaviour {
         foreach(var node in graph.nodesByCenterPosition.Values) { //reset 
             node.ResetDijkstra();
         }
-        if(ignoreCost) DijkstraSearchIgnoreCost();
-        else DijkstraSearch();
-        var shortestPath = new List<MapGraph.MapNode>();
+        if(ignoreCost) DijkstraSearchIgnoreCost(); else DijkstraSearch();
+        shortestPath.Clear();
         shortestPath.Add(toNode);
         BuildShortestPath(shortestPath, toNode);
         shortestPath.Reverse();
