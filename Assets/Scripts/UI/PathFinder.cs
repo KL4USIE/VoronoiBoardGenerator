@@ -82,10 +82,10 @@ public class PathFinder : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha1)) { //Subtract 1 from budget
             if(pathFinderBudget > 0) {
                 pathFinderBudget--;
-            }
-            if (fromNode != null && toNode != null) {
-                List<MapGraph.MapNode> path = GetShortestPath();
-            }
+                if (fromNode != null && toNode != null) {
+                    List<MapGraph.MapNode> path = GetShortestPath();
+                }
+            }         
         }
         if (Input.GetKeyDown(KeyCode.Alpha2)) { //Add 1 to budget
             pathFinderBudget++;
@@ -101,6 +101,12 @@ public class PathFinder : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Alpha4)) { //Set budget to 25
             pathFinderBudget = 25;
+            if (fromNode != null && toNode != null) {
+                List<MapGraph.MapNode> path = GetShortestPath();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) { //Set budget to 50
+            pathFinderBudget = 50;
             if (fromNode != null && toNode != null) {
                 List<MapGraph.MapNode> path = GetShortestPath();
             }
@@ -182,12 +188,12 @@ public class PathFinder : MonoBehaviour {
     /// cuts off the given path according to budget
     /// </summary>
     /// <returns>List of the nodes making up the shortest path, including stand and end</returns>
-    private List<MapGraph.MapNode> BudgetPath(List<MapGraph.MapNode> shortestPath, int budget) {
+    private List<MapGraph.MapNode> BudgetPath(List<MapGraph.MapNode> shortestPath, int budget) { //WARNING: ugly code below
         LinkedList<MapGraph.MapNode> linkedSPath = new LinkedList<MapGraph.MapNode>(shortestPath);
         LinkedListNode<MapGraph.MapNode> currentNode = linkedSPath.First;
         while(budget > 0) { //while budget left         
                 if (budget - currentNode.Next.Value.cost < 0 && !ignoreCost) { //if next node not affordable and calcutlate cost
-                    while (currentNode.Next != null) {
+                    while (currentNode.Next != null) { //remove unreachable nodes from path
                         linkedSPath.RemoveLast();
                     }
                     return new List<MapGraph.MapNode>(linkedSPath);                            
@@ -201,7 +207,7 @@ public class PathFinder : MonoBehaviour {
                 }   
             
         }
-        while (currentNode.Next != null) {
+        while (currentNode.Next != null) { //remove unreachable nodes from path
             linkedSPath.RemoveLast();
         }
         return new List<MapGraph.MapNode>(linkedSPath);
@@ -283,6 +289,7 @@ public class PathFinder : MonoBehaviour {
     private void OnGUI() {
         if(ignoreCost) {
             GUI.Label(new Rect(10, 80, 200, 120), "Pathfinding Budget: " + pathFinderBudget + "\n" +
+                                                  "1,2,3,4,5,0 - Control budget \n" +
                                                   "Q - Set start node \n" +
                                                   "E - Set target node \n" +
                                                   "R - Reset markers \n" +
@@ -292,6 +299,7 @@ public class PathFinder : MonoBehaviour {
                                                   guiStyleSmall);
         } else {
             GUI.Label(new Rect(10, 80, 200, 120), "Pathfinding Budget: " + pathFinderBudget + "\n" +
+                                                  "1,2,3,4,5,0 - Control budget \n" +
                                                   "Q - Set start node \n" +
                                                   "E - Set target node \n" +
                                                   "R - Reset markers \n" +
@@ -300,7 +308,7 @@ public class PathFinder : MonoBehaviour {
                                                   guiStyleSmall);
         }      
         if(showCostRules) {
-            GUI.Label(new Rect(250, 80, 400, 120), "1-Cost Types: Grass, Steppe, Sand \n" +
+            GUI.Label(new Rect(270, 80, 400, 120), "1-Cost Types: Grass, Steppe, Sand \n" +
                                                    "2-Cost Types: Forest, PineForest, SaltWater, FreshWater \n" +
                                                    "3-Cost Types: Mountain, Highland \n" +
                                                    "4-Cost Types: Snow \n" +
