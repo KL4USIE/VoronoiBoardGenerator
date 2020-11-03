@@ -454,7 +454,7 @@ MonoBehaviour:
   - type: 0
     color: {r: 0.022160918, g: 0.6889803, b: 0.7830189, a: 1}
   - type: 1
-    color: {r: 0.415, g: 0.3197541, b: 0.08163934, a: 1}
+    color: {r: 0.613, g: 0.54388726, b: 0.39364216, a: 1}
   - type: 8
     color: {r: 1, g: 0.67000276, b: 0, a: 1}
   - type: 2
@@ -472,8 +472,8 @@ MonoBehaviour:
   - type: 10
     color: {r: 0.19111006, g: 0.4056604, b: 0.14159843, a: 1}
   - type: 11
-    color: {r: 0.6415094, g: 0.5376899, b: 0.32680666, a: 1}
-  pointGeneration: 0
+    color: {r: 0.6117647, g: 0.551514, b: 0.39214116, a: 1}
+  pointGeneration: 1
   pointSpacing: 10
   relaxationIterations: 0
   snapDistance: 1
@@ -586,6 +586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cManager: {fileID: 423346043}
+  redMat: {fileID: 2100000, guid: c6a46c2741e9a444691347bf2c3136f6, type: 2}
 --- !u!1 &446865771
 GameObject:
   m_ObjectHideFlags: 0
