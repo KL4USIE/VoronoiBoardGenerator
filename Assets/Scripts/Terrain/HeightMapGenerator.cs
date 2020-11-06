@@ -26,12 +26,12 @@ public static class HeightMapGenerator {
     private static float[,] RaiseMountains(MapGraph graph, float[,] values) {
         Dictionary<MapGraph.MapPoint, int> cornerDic = new Dictionary<MapGraph.MapPoint, int>();
         foreach(MapGraph.MapNode node in graph.mountainNodes) {
-            values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 3;//raise node center, works, USE Z           
+            values[(int)node.centerPoint.x, (int)node.centerPoint.z] = 5;//raise node center, works, USE Z           
             foreach(MapGraph.MapPoint corner in node.GetCorners()) {     //go through all corners of all mountain nodes, corners between mountains will appear multiple times.
                 if(cornerDic.ContainsKey(corner)) {                      //...if a corner appears three times, raise it
                     cornerDic[corner]++;
                     if(cornerDic[corner] == 3) {
-                        values[(int)corner.position.x, (int)corner.position.z] = 3;
+                        values[(int)corner.position.x, (int)corner.position.z] = 4;
                     }
                 } else {
                     cornerDic.Add(corner, 1);

@@ -320,7 +320,7 @@ public static class MapGenerator {
         graph.snowNodes.Clear();
         foreach (var node in new List<MapGraph.MapNode>(graph.mountainNodes)) {
             if (node.nodeType != MapGraph.MapNodeType.FreshWater || node.nodeType != MapGraph.MapNodeType.SaltWater) {
-                if (CheckSnowV2(graph, node)) {
+                if (CheckSnowV2(graph, node) && UnityEngine.Random.Range(0.0f, 1.0f) < 0.6f) {
                     node.nodeType = MapGraph.MapNodeType.Snow;
                     node.cost = MapGraph.snowCost;
                     graph.snowNodes.Add(node);
