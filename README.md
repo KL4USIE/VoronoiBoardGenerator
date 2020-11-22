@@ -3,7 +3,7 @@ This is a Unity implementation of a game board generator, inspired by strategy g
 
 Uses jceipek's Unity-delaunay project for Voronoi diagrams and SteveJohnstone's map generator for mapping them onto a mesh.
 
-![Example Image](https://github.com/KL4USIE/VoronoiBoardGenerator/tree/master/general_example.png?raw=true)
+Example Image(https://github.com/KL4USIE/VoronoiBoardGenerator/blob/master/general_example.PNG)
 
 
 ## References
