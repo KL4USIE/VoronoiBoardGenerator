@@ -199,10 +199,11 @@ public class PathFinder : MonoBehaviour {
     /// </summary>
     /// <returns>List of the nodes making up the shortest path, including stand and end</returns>
     private List<MapGraph.MapNode> BudgetPath(List<MapGraph.MapNode> shortestPath, int budget) { //WARNING: ugly code below
+        if (budget == 0) return shortestPath;
         LinkedList<MapGraph.MapNode> linkedSPath = new LinkedList<MapGraph.MapNode>(shortestPath);
         LinkedListNode<MapGraph.MapNode> currentNode = linkedSPath.First;
         while(budget > 0) { //while budget left         
-                if (budget - currentNode.Next.Value.cost < 0 && !ignoreCost) { //if next node not affordable and calcutlate cost
+                if (budget - currentNode.Next.Value.cost < 0 && !ignoreCost) { //if next node not affordable and calculate cost
                     while (currentNode.Next != null) { //remove unreachable nodes from path
                         linkedSPath.RemoveLast();
                     }
